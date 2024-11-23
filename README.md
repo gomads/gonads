@@ -4,7 +4,7 @@
 ![Gover](https://img.shields.io/badge/Go-%3E%3D%201.18-%23007d9c)
 [![Godoc](https://godoc.org/github.com/alsi-lawr/gonads?status.svg)](https://pkg.go.dev/github.com/alsi-lawr/gonads)
 [![Goreport](https://goreportcard.com/badge/github.com/alsi-lawr/gonads)](https://goreportcard.com/report/github.com/alsi-lawr/gonads)
-(todo: add coverage)
+[![codecov](https://codecov.io/gh/alsi-lawr/gonads/graph/badge.svg?token=FyxqW2TQEY)](https://codecov.io/gh/alsi-lawr/gonads)
 [![License](https://img.shields.io/github/license/alsi-lawr/gonads)](./LICENSE)
 
 **`gonads`** brings a set of minimal monads to go. It contains only a set of functional monads that enables FP-style function composition.
