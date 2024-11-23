@@ -12,6 +12,21 @@ type Result[T any] struct {
 	isErr bool
 }
 
+// Lift lifts a function that returns a value and an error into a Result.
+//
+// Type signature:
+//
+//	Lift :: (a -> (b, error)) -> Result b
+//
+// It returns a Result that is either Ok or Err depending on the error.
+func Lift[T any](fn func() (T, error)) Result[T] {
+	val, err := fn()
+	if err != nil {
+		return Err[T](err)
+	}
+	return Ok(val)
+}
+
 // Ok creates a Result representing a successful computation with a value.
 //
 // Type signature:

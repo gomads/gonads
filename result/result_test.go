@@ -217,3 +217,39 @@ func TestBiMapErr(t *testing.T) {
 		}
 	})
 }
+
+func TestLiftFuncSucc(t *testing.T) {
+	res := result.Lift(func() (int, error) {
+		return 42, nil
+	})
+
+	if res.IsErr() || !res.IsOk() {
+		t.Errorf("expected Ok result")
+	}
+
+	res.Match(func(val int) {
+		if val != 42 {
+			t.Errorf("expected value to be 42, got %d", val)
+		}
+	}, func(err error) {
+		t.Errorf("unexpected error")
+	})
+}
+
+func TestLiftFuncErr(t *testing.T) {
+	res := result.Lift(func() (int, error) {
+		return 0, errors.New("test error")
+	})
+
+	if !res.IsErr() || res.IsOk() {
+		t.Errorf("expected Err result")
+	}
+
+	res.Match(func(val int) {
+		t.Errorf("expected error, got %v", val)
+	}, func(err error) {
+		if err.Error() != "test error" {
+			t.Errorf("expected error to be 'test error', got %v", err)
+		}
+	})
+}
