@@ -1,4 +1,4 @@
-package funcs
+package iters
 
 // Fold applies a function to each element of a slice, reducing it to a single value.
 //

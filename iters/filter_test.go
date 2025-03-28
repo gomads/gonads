@@ -1,16 +1,16 @@
-package funcs_test
+package iters_test
 
 import (
 	"reflect"
 	"strings"
 	"testing"
 
-	"github.com/alsi-lawr/gonads/funcs"
+	"github.com/alsi-lawr/gonads/iters"
 )
 
 func TestFilter(t *testing.T) {
 	input := []int{1, 2, 3, 4, 5, 6}
-	got := funcs.Filter(input, func(x int) bool {
+	got := iters.Filter(input, func(x int) bool {
 		return x%2 == 0
 	})
 
@@ -22,7 +22,7 @@ func TestFilter(t *testing.T) {
 
 func TestFilterI(t *testing.T) {
 	input := []string{"a", "b", "c", "d"}
-	got := funcs.FilterI(input, func(i int, s string) bool {
+	got := iters.FilterI(input, func(i int, s string) bool {
 		return i%2 != 0
 	})
 	want := []string{"b", "d"}
@@ -33,7 +33,7 @@ func TestFilterI(t *testing.T) {
 
 func TestFilterMap(t *testing.T) {
 	input := map[string]int{"a": 1, "b": 2, "c": 3}
-	got := funcs.FilterMap(input, func(k string, v int) bool {
+	got := iters.FilterMap(input, func(k string, v int) bool {
 		return v%2 == 0
 	})
 	want := map[string]int{"b": 2}
@@ -50,7 +50,7 @@ func TestFilterChan(t *testing.T) {
 	}
 	close(in)
 
-	out := funcs.FilterChan(in, func(x int) bool {
+	out := iters.FilterChan(in, func(x int) bool {
 		return x > 3
 	})
 	var got []int
@@ -65,7 +65,7 @@ func TestFilterChan(t *testing.T) {
 
 func TestFilterString(t *testing.T) {
 	input := "hello, world!"
-	got := funcs.FilterString(input, func(r rune) bool {
+	got := iters.FilterString(input, func(r rune) bool {
 		return !strings.ContainsRune("aeiouAEIOU", r)
 	})
 	want := "hll, wrld!"
@@ -76,7 +76,7 @@ func TestFilterString(t *testing.T) {
 
 func TestFilterStringI(t *testing.T) {
 	input := "abcdef"
-	got := funcs.FilterStringI(input, func(i int, r rune) bool {
+	got := iters.FilterStringI(input, func(i int, r rune) bool {
 		return i%2 == 0
 	})
 	want := "ace"

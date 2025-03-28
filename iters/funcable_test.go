@@ -1,8 +1,8 @@
-package funcs_test
+package iters_test
 
-import "github.com/alsi-lawr/gonads/funcs"
+import "github.com/alsi-lawr/gonads/iters"
 
-func AnyDeepEqual[T comparable](a []any, s funcs.Collection[T]) bool {
+func AnyDeepEqual[T comparable](a []any, s iters.Collection[T]) bool {
 	if len(a) != len(s) {
 		return false
 	}

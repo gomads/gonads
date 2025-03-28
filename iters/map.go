@@ -1,4 +1,4 @@
-package funcs
+package iters
 
 // Map applies a function to each element of a slice, returning a new slice with the mapped values.
 //
@@ -7,7 +7,7 @@ package funcs
 //	Map :: [T] -> (T -> R) -> [R]
 //
 // Each element in the input slice is transformed using f.
-func Map[T any, R any](s []T, f func(T) R) []R {
+func Map[T any, R any](s Collection[T], f func(T) R) Collection[R] {
 	result := make([]R, len(s))
 	for i, v := range s {
 		result[i] = f(v)
@@ -19,12 +19,10 @@ func Map[T any, R any](s []T, f func(T) R) []R {
 //
 // Type signature:
 //
-
 //	MapSliceWithIndex :: [T] -> ((Int, T) -> R) -> [R]
 //
 // The function f receives both the index and the element for transformation.
-
-func MapI[T any, R any](s []T, f func(int, T) R) []R {
+func MapI[T any, R any](s Collection[T], f func(int, T) R) Collection[R] {
 	result := make([]R, len(s))
 	for i, v := range s {
 		result[i] = f(i, v)
@@ -39,8 +37,7 @@ func MapI[T any, R any](s []T, f func(int, T) R) []R {
 //	MapSliceErr :: [T] -> (T -> (R, error)) -> ([R], error)
 //
 // Each element is processed using f, and processing stops if an error is encountered.
-
-func MapErr[T any, R any](s []T, f func(T) (R, error)) ([]R, error) {
+func MapErr[T any, R any](s Collection[T], f func(T) (R, error)) (Collection[R], error) {
 	result := make([]R, len(s))
 	for i, v := range s {
 		r, err := f(v)
@@ -158,7 +155,7 @@ func MapStringI(s string, f func(int, rune) rune) string {
 //
 // Each element in the input slice is transformed using f.
 func (s Mappable[T, R]) Map(f func(T) R) Collection[R] {
-	return LiftSlice(Map(s, f))
+	return Map(s.ToCollection(), f)
 }
 
 // MapSliceWithIndex applies a function to each element of a slice along with its index, returning a new slice with the mapped values.
@@ -169,7 +166,7 @@ func (s Mappable[T, R]) Map(f func(T) R) Collection[R] {
 //
 // The function f receives both the index and the element for transformation.
 func (s Mappable[T, R]) MapI(f func(int, T) R) Collection[R] {
-	return LiftSlice(MapI(s, f))
+	return MapI(s.ToCollection(), f)
 }
 
 // MapSliceErr applies a function to each element of a slice, returning a new slice with the mapped values or an error if one occurs.
@@ -180,8 +177,7 @@ func (s Mappable[T, R]) MapI(f func(int, T) R) Collection[R] {
 //
 // Each element is processed using f, and processing stops if an error is encountered.
 func (s Mappable[T, R]) MapErr(f func(T) (R, error)) (Collection[R], error) {
-	c, err := MapErr(s, f)
-	return LiftSlice(c), err
+	return MapErr(s.ToCollection(), f)
 }
 
 // Map applies a function to each element of a slice, returning a new slice with the mapped values.
@@ -195,7 +191,7 @@ func (s Mappable[T, R]) MapErr(f func(T) (R, error)) (Collection[R], error) {
 //
 // Each element in the input slice is transformed using f.
 func (s Collection[T]) MapUnsafe(f func(T) any) Collection[any] {
-	return LiftSlice(Map(s, f))
+	return Map(s, f)
 }
 
 // MapSliceWithIndex applies a function to each element of a slice along with its index, returning a new slice with the mapped values.
@@ -209,7 +205,7 @@ func (s Collection[T]) MapUnsafe(f func(T) any) Collection[any] {
 //
 // The function f receives both the index and the element for transformation.
 func (s Collection[T]) MapIUnsafe(f func(int, T) any) Collection[any] {
-	return LiftSlice(MapI(s, f))
+	return MapI(s, f)
 }
 
 // MapSliceErr applies a function to each element of a slice, returning a new slice with the mapped values or an error if one occurs.
@@ -223,6 +219,5 @@ func (s Collection[T]) MapIUnsafe(f func(int, T) any) Collection[any] {
 //
 // Each element is processed using f, and processing stops if an error is encountered.
 func (s Collection[T]) MapErrUnsafe(f func(T) (any, error)) (Collection[any], error) {
-	c, err := MapErr(s, f)
-	return LiftSlice(c), err
+	return MapErr(s, f)
 }

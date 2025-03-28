@@ -1,4 +1,4 @@
-package funcs
+package iters
 
 // Filter applies a predicate to each element of a slice, returning a new slice with only the elements that satisfy the predicate.
 //

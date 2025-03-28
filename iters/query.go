@@ -1,4 +1,4 @@
-package funcs
+package iters
 
 // Find returns the first element in the slice that satisfies the predicate f.
 //
@@ -7,7 +7,7 @@ package funcs
 //	Find :: [T] -> (T -> bool) -> (T, bool)
 //
 // If an element is found, it returns the element and true; otherwise, it returns the zero value of T and false.
-func Find[T any](s []T, f func(T) bool) (T, bool) {
+func Find[T any](s Collection[T], f func(T) bool) (T, bool) {
 	for _, v := range s {
 		if f(v) {
 			return v, true
@@ -24,7 +24,7 @@ func Find[T any](s []T, f func(T) bool) (T, bool) {
 //	FindIndex :: [T] -> (T -> bool) -> int
 //
 // If no element satisfies f, it returns -1.
-func FindIndex[T any](s []T, f func(T) bool) int {
+func FindIndex[T any](s Collection[T], f func(T) bool) int {
 	for i, v := range s {
 		if f(v) {
 			return i
@@ -40,7 +40,7 @@ func FindIndex[T any](s []T, f func(T) bool) int {
 //	FindFirst :: [T] -> (T -> bool) -> (T, bool)
 //
 // If an element is found, it returns the element and true; otherwise, it returns the zero value of T and false.
-func FindFirst[T any](s []T, f func(T) bool) (T, bool) {
+func FindFirst[T any](s Collection[T], f func(T) bool) (T, bool) {
 	for i := 0; i < len(s); i++ {
 		if f(s[i]) {
 			return s[i], true
@@ -58,7 +58,7 @@ func FindFirst[T any](s []T, f func(T) bool) (T, bool) {
 //	FindLast :: [T] -> (T -> bool) -> (T, bool)
 //
 // If an element is found, it returns the element and true; otherwise, it returns the zero value of T and false.
-func FindLast[T any](s []T, f func(T) bool) (T, bool) {
+func FindLast[T any](s Collection[T], f func(T) bool) (T, bool) {
 	for i := len(s) - 1; i >= 0; i-- {
 		if f(s[i]) {
 			return s[i], true
@@ -74,7 +74,7 @@ func FindLast[T any](s []T, f func(T) bool) (T, bool) {
 // Type signature:
 //
 //	Some :: [T] -> (T -> bool) -> bool
-func Some[T any](s []T, f func(T) bool) bool {
+func Some[T any](s Collection[T], f func(T) bool) bool {
 	for _, v := range s {
 		if f(v) {
 			return true
@@ -88,7 +88,7 @@ func Some[T any](s []T, f func(T) bool) bool {
 // Type signature:
 //
 //	All :: [T] -> (T -> bool) -> bool
-func All[T any](s []T, f func(T) bool) bool {
+func All[T any](s Collection[T], f func(T) bool) bool {
 	for _, v := range s {
 		if !f(v) {
 			return false
@@ -102,7 +102,7 @@ func All[T any](s []T, f func(T) bool) bool {
 // Type signature:
 //
 //	None :: [T] -> (T -> bool) -> bool
-func None[T any](s []T, f func(T) bool) bool {
+func None[T any](s Collection[T], f func(T) bool) bool {
 	for _, v := range s {
 		if f(v) {
 			return false
@@ -116,7 +116,7 @@ func None[T any](s []T, f func(T) bool) bool {
 // Type signature:
 //
 //	Count :: [T] -> (T -> bool) -> int
-func Count[T any](s []T, f func(T) bool) int {
+func Count[T any](s Collection[T], f func(T) bool) int {
 	count := 0
 	for _, v := range s {
 		if f(v) {

@@ -1,4 +1,4 @@
-package funcs
+package iters
 
 // GroupBy groups elements of a slice into a map keyed by the output of the key function f.
 //
@@ -61,32 +61,4 @@ func (s Collection[T]) GroupByUnsafe(f func(T) any) Grouping[any, T] {
 // elements for which f returned that key.
 func (s Collection[T]) GroupByIUnsafe(f func(int, T) any) Grouping[any, T] {
 	return GroupByI(s, f)
-}
-
-// Aggregate applies an aggregation function to each group and returns a map of the aggregated results.
-//
-// [Unsafe Variant] This method loses compile-time type safety by returning `any` rather than a strongly-typed map.
-// Use only when necessary.
-//
-// Type signature:
-//
-//	Aggregate :: Grouping K [T] -> ((K, [T]) -> R) -> Map K R
-func Aggregate[K comparable, T, R any](g Grouping[K, T], agg func(key K, items []T) R) map[K]R {
-	result := make(map[K]R, len(g))
-	for k, items := range g {
-		result[k] = agg(k, items)
-	}
-	return result
-}
-
-// Aggregate applies an aggregation function to each group and returns a map of the aggregated results.
-//
-// [Unsafe Variant] This method loses compile-time type safety by returning `any` rather than a strongly-typed map.
-// Use only when necessary.
-//
-// Type signature:
-//
-//	Aggregate :: Grouping K [T] -> ((K, [T]) -> R) -> Map K R
-func (gq Grouping[K, T]) AggregateUnsafe(agg func(key K, items []T) any) map[K]any {
-	return Aggregate(gq, agg)
 }
