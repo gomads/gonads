@@ -1,10 +1,12 @@
 package iters
 
+import "github.com/alsi-lawr/gonads/result"
+
 // Map applies a function to each element of a slice, returning a new slice with the mapped values.
 //
 // Type signature:
 //
-//	Map :: [T] -> (T -> R) -> [R]
+//	Map :: Iter T -> (T -> R) -> Iter R
 //
 // Each element in the input slice is transformed using f.
 func Map[T any, R any](s Iter[T], f func(T) R) Iter[R] {
@@ -19,7 +21,7 @@ func Map[T any, R any](s Iter[T], f func(T) R) Iter[R] {
 //
 // Type signature:
 //
-//	MapSliceWithIndex :: [T] -> ((Int, T) -> R) -> [R]
+//	MapSliceWithIndex :: Iter T -> ((Int, T) -> R) -> Iter R
 //
 // The function f receives both the index and the element for transformation.
 func MapI[T any, R any](s Iter[T], f func(int, T) R) Iter[R] {
@@ -34,19 +36,19 @@ func MapI[T any, R any](s Iter[T], f func(int, T) R) Iter[R] {
 //
 // Type signature:
 //
-//	MapSliceErr :: [T] -> (T -> (R, error)) -> ([R], error)
+//	MapSliceErr :: Iter T -> (T -> (R, error)) -> Result Iter R
 //
 // Each element is processed using f, and processing stops if an error is encountered.
-func MapErr[T any, R any](s Iter[T], f func(T) (R, error)) (Iter[R], error) {
-	result := make([]R, len(s))
+func MapErr[T any, R any](s Iter[T], f func(T) (R, error)) result.Result[Iter[R]] {
+	mapRes := make(Iter[R], len(s))
 	for i, v := range s {
 		r, err := f(v)
 		if err != nil {
-			return nil, err
+			return result.Err[Iter[R]](err)
 		}
-		result[i] = r
+		mapRes[i] = r
 	}
-	return result, nil
+	return result.Ok[Iter[R]](mapRes)
 }
 
 // MapMap applies a function to each key/value pair of a map, returning a new map with transformed keys and values.
@@ -151,7 +153,7 @@ func MapStringI(s string, f func(int, rune) rune) string {
 //
 // Type signature:
 //
-//	Map :: [T] -> (T -> R) -> [R]
+//	Map :: Mappable T -> (T -> R) -> Iter R
 //
 // Each element in the input slice is transformed using f.
 func (s Mappable[T, R]) Map(f func(T) R) Iter[R] {
@@ -162,7 +164,7 @@ func (s Mappable[T, R]) Map(f func(T) R) Iter[R] {
 //
 // Type signature:
 //
-//	MapSliceWithIndex :: [T] -> ((Int, T) -> R) -> [R]
+//	MapSliceWithIndex :: Mappable T -> ((Int, T) -> R) -> Iter R
 //
 // The function f receives both the index and the element for transformation.
 func (s Mappable[T, R]) MapI(f func(int, T) R) Iter[R] {
@@ -173,10 +175,10 @@ func (s Mappable[T, R]) MapI(f func(int, T) R) Iter[R] {
 //
 // Type signature:
 //
-//	MapSliceErr :: [T] -> (T -> (R, error)) -> ([R], error)
+//	MapSliceErr :: Mappable T -> (T -> (R, error)) -> (Iter R, error)
 //
 // Each element is processed using f, and processing stops if an error is encountered.
-func (s Mappable[T, R]) MapErr(f func(T) (R, error)) (Iter[R], error) {
+func (s Mappable[T, R]) MapErr(f func(T) (R, error)) result.Result[Iter[R]] {
 	return MapErr(s.ToIter(), f)
 }
 
@@ -187,7 +189,7 @@ func (s Mappable[T, R]) MapErr(f func(T) (R, error)) (Iter[R], error) {
 //
 // Type signature:
 //
-//	Map :: [T] -> (T -> R) -> [R]
+//	Map :: Iter T -> (T -> any) -> Iter any
 //
 // Each element in the input slice is transformed using f.
 func (s Iter[T]) MapUnsafe(f func(T) any) Iter[any] {
@@ -201,7 +203,7 @@ func (s Iter[T]) MapUnsafe(f func(T) any) Iter[any] {
 //
 // Type signature:
 //
-//	MapSliceWithIndex :: [T] -> ((Int, T) -> R) -> [R]
+//	MapSliceWithIndex :: Iter T -> ((Int, T) -> any) -> Iter any
 //
 // The function f receives both the index and the element for transformation.
 func (s Iter[T]) MapIUnsafe(f func(int, T) any) Iter[any] {
@@ -215,9 +217,9 @@ func (s Iter[T]) MapIUnsafe(f func(int, T) any) Iter[any] {
 //
 // Type signature:
 //
-//	MapSliceErr :: [T] -> (T -> (R, error)) -> ([R], error)
+//	MapSliceErr :: Iter T -> (T -> (any, error)) -> Result Iter any
 //
 // Each element is processed using f, and processing stops if an error is encountered.
-func (s Iter[T]) MapErrUnsafe(f func(T) (any, error)) (Iter[any], error) {
+func (s Iter[T]) MapErrUnsafe(f func(T) (any, error)) result.Result[Iter[any]] {
 	return MapErr(s, f)
 }

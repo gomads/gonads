@@ -5,7 +5,7 @@ package iters
 //
 // Type signature:
 //
-//	FlatMap :: [T] -> (T -> [R]) -> [R]
+//	FlatMap :: Iter T -> (T -> Iter R) -> Iter R
 func FlatMap[T any, R any](s Iter[T], f func(T) Iter[R]) Iter[R] {
 	var result []R
 	for _, v := range s {
@@ -19,7 +19,7 @@ func FlatMap[T any, R any](s Iter[T], f func(T) Iter[R]) Iter[R] {
 //
 // Type signature:
 //
-//	FlatMapI :: [T] -> ((Int, T) -> [R]) -> [R]
+//	FlatMapI :: Iter T -> ((Int, T) -> Iter R) -> Iter R
 func FlatMapI[T any, R any](s Iter[T], f func(int, T) Iter[R]) Iter[R] {
 	var result []R
 	for i, v := range s {
@@ -33,7 +33,7 @@ func FlatMapI[T any, R any](s Iter[T], f func(int, T) Iter[R]) Iter[R] {
 //
 // Type signature:
 //
-//	FlatMap :: [T] -> (T -> [R]) -> [R]
+//	FlatMap :: Iter T -> (T -> Iter R) -> Iter R
 func (s Mappable[T, R]) FlatMap(f func(T) Iter[R]) Iter[R] {
 	return FlatMap(s.ToIter(), f)
 }
@@ -43,7 +43,7 @@ func (s Mappable[T, R]) FlatMap(f func(T) Iter[R]) Iter[R] {
 //
 // Type signature:
 //
-//	FlatMapI :: [T] -> ((Int, T) -> [R]) -> [R]
+//	FlatMapI :: Mappable T R -> ((Int, T) -> Iter R) -> Iter R
 func (s Mappable[T, R]) FlatMapI(f func(int, T) Iter[R]) Iter[R] {
 	return FlatMapI(s.ToIter(), f)
 }
@@ -56,7 +56,7 @@ func (s Mappable[T, R]) FlatMapI(f func(int, T) Iter[R]) Iter[R] {
 //
 // Type signature:
 //
-//	FlatMap :: [T] -> (T -> [R]) -> [R]
+//	FlatMap :: Iter T -> (T -> Iter any) -> Iter any
 func (s Iter[T]) FlatMapUnsafe(f func(T) Iter[any]) Iter[any] {
 	return FlatMap(s, f)
 }
@@ -69,7 +69,7 @@ func (s Iter[T]) FlatMapUnsafe(f func(T) Iter[any]) Iter[any] {
 //
 // Type signature:
 //
-//	FlatMapI :: [T] -> ((Int, T) -> [R]) -> [R]
+//	FlatMapI :: Iter T -> ((Int, T) -> Iter any) -> Iter any
 func (s Iter[T]) FlatMapIUnsafe(f func(int, T) Iter[any]) Iter[any] {
 	return FlatMapI(s, f)
 }

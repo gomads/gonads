@@ -4,7 +4,7 @@ package iters
 //
 // Type signature:
 //
-//	GroupBy :: [T] -> (T -> K) -> Map K [T]
+//	GroupBy :: Iter T -> (T -> K) -> Grouping K T
 //
 // Returns a map where each key is produced by f and the corresponding value is a slice of all
 // elements for which f returned that key.
@@ -22,7 +22,7 @@ func GroupBy[T any, K comparable](s Iter[T], f func(T) K) Grouping[K, T] {
 //
 // Type signature:
 //
-//	GroupByI :: [T] -> ((Int, T) -> K) -> Map K [T]
+//	GroupByI :: Iter T -> ((Int, T) -> K) -> Grouping K T
 //
 // Returns a map where each key is produced by f and the corresponding value is a slice of all
 // elements for which f returned that key.
@@ -39,7 +39,7 @@ func GroupByI[T any, K comparable](s Iter[T], f func(int, T) K) Grouping[K, T] {
 //
 // Type signature:
 //
-//	GroupBy :: [T] -> (T -> K) -> Map K [T]
+//	GroupBy :: Iter T -> (T -> any) -> Grouping any T
 //
 // Returns a map where each key is produced by f and the corresponding value is a slice of all
 // elements for which f returned that key.
@@ -55,7 +55,7 @@ func (s Iter[T]) GroupByUnsafe(f func(T) any) Grouping[any, T] {
 //
 // Type signature:
 //
-//	GroupByI :: [T] -> ((Int, T) -> K) -> Map K [T]
+//	GroupByI :: Iter T -> ((Int, T) -> any) -> Grouping any T
 //
 // Returns a map where each key is produced by f and the corresponding value is a slice of all
 // elements for which f returned that key.

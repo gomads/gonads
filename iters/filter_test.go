@@ -14,7 +14,7 @@ func TestFilterStatic(t *testing.T) {
 		return x%2 == 0
 	})
 
-	want := []int{2, 4, 6}
+	want := iters.Iter[int]{2, 4, 6}
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("Filter() = %v, want %v", got, want)
 	}
@@ -25,7 +25,7 @@ func TestFilterIStatic(t *testing.T) {
 	got := iters.FilterI(input, func(i int, s string) bool {
 		return i%2 != 0
 	})
-	want := []string{"b", "d"}
+	want := iters.Iter[string]{"b", "d"}
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("FilterI() = %v, want %v", got, want)
 	}

@@ -4,8 +4,8 @@ package iters
 //
 // Type signature:
 //
-//	Filter :: [T] -> (T -> bool) -> [T]
-func Filter[T any](s []T, f func(T) bool) []T {
+//	Filter :: Iter T -> (T -> bool) -> Iter T
+func Filter[T any](s Iter[T], f func(T) bool) Iter[T] {
 	var result []T
 	for _, v := range s {
 		if f(v) {
@@ -20,8 +20,8 @@ func Filter[T any](s []T, f func(T) bool) []T {
 //
 // Type signature:
 //
-//	FilterI :: [T] -> ((Int, T) -> bool) -> [T]
-func FilterI[T any](s []T, f func(int, T) bool) []T {
+//	FilterI :: Iter T -> ((Int, T) -> bool) -> Iter T
+func FilterI[T any](s Iter[T], f func(int, T) bool) Iter[T] {
 	var result []T
 	for i, v := range s {
 		if f(i, v) {
@@ -106,7 +106,7 @@ func FilterStringI(s string, f func(int, rune) bool) string {
 //
 // Type signature:
 //
-//	Filter :: [T] -> (T -> bool) -> [T]
+//	Filter :: Iter T -> (T -> bool) -> Iter T
 func (s Iter[T]) Filter(f func(T) bool) Iter[T] {
 	return Filter(s, f)
 }
@@ -116,7 +116,7 @@ func (s Iter[T]) Filter(f func(T) bool) Iter[T] {
 //
 // Type signature:
 //
-//	FilterI :: [T] -> ((Int, T) -> bool) -> [T]
+//	FilterI :: Iter T -> ((Int, T) -> bool) -> Iter T
 func (s Iter[T]) FilterI(f func(int, T) bool) Iter[T] {
 	return FilterI(s, f)
 }

@@ -30,7 +30,7 @@ func AggregateI[K comparable, T, R any](g Grouping[K, T], agg func(key K, items 
 //
 // Type signature:
 //
-//	Aggregate :: Grouping K [T] -> ((T] -> any) -> Map K any
+//	Aggregate :: Aggregable K [T] -> ((T] -> R) -> Map K R
 func (gq Aggregable[K, T, R]) Aggregate(agg func(items Iter[T]) R) map[K]R {
 	return Aggregate(gq.ToGrouping(), agg)
 }
@@ -39,7 +39,7 @@ func (gq Aggregable[K, T, R]) Aggregate(agg func(items Iter[T]) R) map[K]R {
 //
 // Type signature:
 //
-//	AggregateI :: Grouping K [T] -> ((K, [T]) -> any) -> Map K any
+//	AggregateI :: Aggregable K [T] -> ((K, [T]) -> R) -> Map K R
 func (gq Aggregable[K, T, R]) AggregateI(agg func(key K, items Iter[T]) R) map[K]R {
 	return AggregateI(gq.ToGrouping(), agg)
 }

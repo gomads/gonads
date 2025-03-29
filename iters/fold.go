@@ -4,8 +4,8 @@ package iters
 //
 // Type signature:
 //
-//	Fold :: [T] -> A -> ((A, T) -> A) -> A
-func Fold[T any, A any](s []T, init A, f func(A, T) A) A {
+//	Fold :: Iter T -> A -> ((A, T) -> A) -> A
+func Fold[T any, A any](s Iter[T], init A, f func(A, T) A) A {
 	acc := init
 	for _, v := range s {
 		acc = f(acc, v)
@@ -17,8 +17,8 @@ func Fold[T any, A any](s []T, init A, f func(A, T) A) A {
 //
 // Type signature:
 //
-//	FoldI :: [T] -> A -> ((Int, A, T) -> A) -> A
-func FoldI[T any, A any](s []T, init A, f func(int, A, T) A) A {
+//	FoldI :: Iter T -> A -> ((Int, A, T) -> A) -> A
+func FoldI[T any, A any](s Iter[T], init A, f func(int, A, T) A) A {
 	acc := init
 	for i, v := range s {
 		acc = f(i, acc, v)
@@ -83,25 +83,25 @@ func FoldStringI[A any](s string, init A, f func(int, A, rune) A) A {
 //
 // Type signature:
 //
-//	Fold :: [T] -> A -> ((A, T) -> A) -> A
+//	Fold :: Mappable T -> A -> ((A, T) -> A) -> A
 func (s Mappable[T, A]) Fold(init A, f func(A, T) A) A {
-	return Fold(s, init, f)
+	return Fold((Iter[T])(s), init, f)
 }
 
 // FoldI applies a function to each element of a slice with its index, reducing it to a single value.
 //
 // Type signature:
 //
-//	FoldI :: [T] -> A -> ((Int, A, T) -> A) -> A
+//	FoldI :: Mappable T -> A -> ((Int, A, T) -> A) -> A
 func (s Mappable[T, A]) FoldI(init A, f func(int, A, T) A) A {
-	return FoldI(s, init, f)
+	return FoldI((Iter[T])(s), init, f)
 }
 
 // Fold applies a function to each element of a slice, reducing it to a single value.
 //
 // Type signature:
 //
-//	Fold :: [T] -> A -> ((A, T) -> A) -> A
+//	Fold :: Iter T -> any -> ((any, T) -> any) -> any
 func (s Iter[T]) FoldUnsafe(init any, f func(any, T) any) any {
 	return Fold(s, init, f)
 }
@@ -110,7 +110,7 @@ func (s Iter[T]) FoldUnsafe(init any, f func(any, T) any) any {
 //
 // Type signature:
 //
-//	FoldI :: [T] -> A -> ((Int, A, T) -> A) -> A
+//	FoldI :: Iter T -> any -> ((Int, any, T) -> any) -> any
 func (s Iter[T]) FoldIUnsafe(init any, f func(int, any, T) any) any {
 	return FoldI(s, init, f)
 }

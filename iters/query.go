@@ -1,80 +1,77 @@
 package iters
 
+import "github.com/alsi-lawr/gonads/option"
+
 // Find returns the first element in the slice that satisfies the predicate f.
 //
 // Type signature:
 //
-//	Find :: [T] -> (T -> bool) -> (T, bool)
+//	Find :: Iter T -> (T -> bool) -> Option T
 //
-// If an element is found, it returns the element and true; otherwise, it returns the zero value of T and false.
-func Find[T any](s Iter[T], f func(T) bool) (T, bool) {
+// If an element is found, it returns the Some(T); otherwise, it returns None.
+func Find[T any](s Iter[T], f func(T) bool) option.Option[T] {
 	for _, v := range s {
 		if f(v) {
-			return v, true
+			return option.Some[T](v)
 		}
 	}
-	var zero T
-	return zero, false
+	return option.None[T]()
 }
 
 // FindIndex returns the index of the first element in the slice that satisfies the predicate f.
 //
 // Type signature:
 //
-//	FindIndex :: [T] -> (T -> bool) -> int
+//	FindIndex :: Iter T -> (T -> bool) -> Option int
 //
-// If no element satisfies f, it returns -1.
-func FindIndex[T any](s Iter[T], f func(T) bool) int {
+// If no element satisfies f, it returns None.
+func FindIndex[T any](s Iter[T], f func(T) bool) option.Option[int] {
 	for i, v := range s {
 		if f(v) {
-			return i
+			return option.Some(i)
 		}
 	}
-	return -1
+	return option.None[int]()
 }
 
 // FindFirst returns the first element in the slice that satisfies the predicate f.
 //
 // Type signature:
 //
-//	FindFirst :: [T] -> (T -> bool) -> (T, bool)
+//	FindFirst :: Iter T -> (T -> bool) -> Option T
 //
-// If an element is found, it returns the element and true; otherwise, it returns the zero value of T and false.
-func FindFirst[T any](s Iter[T], f func(T) bool) (T, bool) {
+// If an element is found, it returns Some(T); otherwise, it returns None.
+func FindFirst[T any](s Iter[T], f func(T) bool) option.Option[T] {
 	for i := 0; i < len(s); i++ {
 		if f(s[i]) {
-			return s[i], true
+			return option.Some(s[i])
 		}
 	}
-
-	var zero T
-	return zero, false
+	return option.None[T]()
 }
 
 // FindLast returns the last element in the slice that satisfies the predicate f.
 //
 // Type signature:
 //
-//	FindLast :: [T] -> (T -> bool) -> (T, bool)
+//	FindLast :: Iter T -> (T -> bool) -> Option T
 //
-// If an element is found, it returns the element and true; otherwise, it returns the zero value of T and false.
-func FindLast[T any](s Iter[T], f func(T) bool) (T, bool) {
+// If an element is found, it returns Some(T); otherwise, it returns None.
+func FindLast[T any](s Iter[T], f func(T) bool) option.Option[T] {
 	for i := len(s) - 1; i >= 0; i-- {
 		if f(s[i]) {
-			return s[i], true
+			return option.Some(s[i])
 		}
 	}
-
-	var zero T
-	return zero, false
+	return option.None[T]()
 }
 
-// Some returns true if any element in the slice satisfies the predicate f.
+// Any returns true if any element in the slice satisfies the predicate f.
 //
 // Type signature:
 //
-//	Some :: [T] -> (T -> bool) -> bool
-func Some[T any](s Iter[T], f func(T) bool) bool {
+//	Any :: Iter T -> (T -> bool) -> bool
+func Any[T any](s Iter[T], f func(T) bool) bool {
 	for _, v := range s {
 		if f(v) {
 			return true
@@ -87,24 +84,10 @@ func Some[T any](s Iter[T], f func(T) bool) bool {
 //
 // Type signature:
 //
-//	All :: [T] -> (T -> bool) -> bool
+//	All :: Iter T -> (T -> bool) -> bool
 func All[T any](s Iter[T], f func(T) bool) bool {
 	for _, v := range s {
 		if !f(v) {
-			return false
-		}
-	}
-	return true
-}
-
-// None returns true if no element in the slice satisfies the predicate f.
-//
-// Type signature:
-//
-//	None :: [T] -> (T -> bool) -> bool
-func None[T any](s Iter[T], f func(T) bool) bool {
-	for _, v := range s {
-		if f(v) {
 			return false
 		}
 	}
@@ -115,7 +98,7 @@ func None[T any](s Iter[T], f func(T) bool) bool {
 //
 // Type signature:
 //
-//	Count :: [T] -> (T -> bool) -> int
+//	Count :: Iter T -> (T -> bool) -> int
 func Count[T any](s Iter[T], f func(T) bool) int {
 	count := 0
 	for _, v := range s {
@@ -130,10 +113,10 @@ func Count[T any](s Iter[T], f func(T) bool) int {
 //
 // Type signature:
 //
-//	Find :: [T] -> (T -> bool) -> (T, bool)
+//	Find :: Iter T -> (T -> bool) -> Option T
 //
-// If an element is found, it returns the element and true; otherwise, it returns the zero value of T and false.
-func (s Iter[T]) Find(f func(T) bool) (T, bool) {
+// If an element is found, it returns Some(T); otherwise, it returns None.
+func (s Iter[T]) Find(f func(T) bool) option.Option[T] {
 	return Find(s, f)
 }
 
@@ -141,10 +124,10 @@ func (s Iter[T]) Find(f func(T) bool) (T, bool) {
 //
 // Type signature:
 //
-//	FindIndex :: [T] -> (T -> bool) -> int
+//	FindIndex :: Iter T -> (T -> bool) -> int
 //
-// If no element satisfies f, it returns -1.
-func (s Iter[T]) FindIndex(f func(T) bool) int {
+// If no element satisfies f, it returns None.
+func (s Iter[T]) FindIndex(f func(T) bool) option.Option[int] {
 	return FindIndex(s, f)
 }
 
@@ -152,10 +135,10 @@ func (s Iter[T]) FindIndex(f func(T) bool) int {
 //
 // Type signature:
 //
-//	FindFirst :: [T] -> (T -> bool) -> (T, bool)
+//	FindFirst :: Iter T -> (T -> bool) -> Option T
 //
-// If an element is found, it returns the element and true; otherwise, it returns the zero value of T and false.
-func (s Iter[T]) FindFirst(f func(T) bool) (T, bool) {
+// If an element is found, it returns Some(T); otherwise, it returns None.
+func (s Iter[T]) FindFirst(f func(T) bool) option.Option[T] {
 	return FindFirst(s, f)
 }
 
@@ -163,45 +146,36 @@ func (s Iter[T]) FindFirst(f func(T) bool) (T, bool) {
 //
 // Type signature:
 //
-//	FindLast :: [T] -> (T -> bool) -> (T, bool)
+//	FindLast :: Iter T -> (T -> bool) -> Option T
 //
-// If an element is found, it returns the element and true; otherwise, it returns the zero value of T and false.
-func (s Iter[T]) FindLast(f func(T) bool) (T, bool) {
+// If an element is found, it returns Some(T); otherwise, it returns None.
+func (s Iter[T]) FindLast(f func(T) bool) option.Option[T] {
 	return FindLast(s, f)
 }
 
-// Some returns true if any element in the slice satisfies the predicate f.
+// Any returns true if any element in the slice satisfies the predicate f.
 //
 // Type signature:
 //
-//	Some :: [T] -> (T -> bool) -> bool
-func (s Iter[T]) Some(f func(T) bool) bool {
-	return Some(s, f)
+//	Any :: Iter T -> (T -> bool) -> bool
+func (s Iter[T]) Any(f func(T) bool) bool {
+	return Any(s, f)
 }
 
 // All returns true if every element in the slice satisfies the predicate f.
 //
 // Type signature:
 //
-//	All :: [T] -> (T -> bool) -> bool
+//	All :: Iter T -> (T -> bool) -> bool
 func (s Iter[T]) All(f func(T) bool) bool {
 	return All(s, f)
-}
-
-// None returns true if no element in the slice satisfies the predicate f.
-//
-// Type signature:
-//
-//	None :: [T] -> (T -> bool) -> bool
-func (s Iter[T]) None(f func(T) bool) bool {
-	return None(s, f)
 }
 
 // Count returns the number of elements in the slice that satisfy the predicate f.
 //
 // Type signature:
 //
-//	Count :: [T] -> (T -> bool) -> int
+//	Count :: Iter T -> (T -> bool) -> int
 func (s Iter[T]) Count(f func(T) bool) int {
 	return Count(s, f)
 }
