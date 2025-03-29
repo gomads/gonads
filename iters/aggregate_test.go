@@ -9,7 +9,7 @@ import (
 
 func TestAggregateGStatic(t *testing.T) {
 	input := iters.Grouping[bool, int]{false: {1, 2, 3, 4}, true: {5, 6, 7, 8}}
-	got := iters.Aggregate(input, func(y iters.Collection[int]) int { return 1 })
+	got := iters.Aggregate(input, func(y iters.Iter[int]) int { return 1 })
 	want := map[bool]int{false: 1, true: 1}
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("AggregateG() = %v, want %v", got, want)
@@ -18,7 +18,7 @@ func TestAggregateGStatic(t *testing.T) {
 
 func TestAggregateIGStatic(t *testing.T) {
 	input := iters.Grouping[bool, int]{false: {1, 2, 3, 4}, true: {5, 6, 7, 8}}
-	got := iters.AggregateI(input, func(k bool, y iters.Collection[int]) int {
+	got := iters.AggregateI(input, func(k bool, y iters.Iter[int]) int {
 		if k {
 			return 1
 		}
@@ -33,7 +33,7 @@ func TestAggregateIGStatic(t *testing.T) {
 
 func TestAggregateGUnsafe(t *testing.T) {
 	input := iters.Grouping[bool, int]{false: {1, 2, 3, 4}, true: {5, 6, 7, 8}}
-	got := input.AggregateUnsafe(func(y iters.Collection[int]) any { return 1 })
+	got := input.AggregateUnsafe(func(y iters.Iter[int]) any { return 1 })
 	want := map[bool]any{false: 1, true: 1}
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("AggregateG() = %v, want %v", got, want)
@@ -42,7 +42,7 @@ func TestAggregateGUnsafe(t *testing.T) {
 
 func TestAggregateIGUnsafe(t *testing.T) {
 	input := iters.Grouping[bool, int]{false: {1, 2, 3, 4}, true: {5, 6, 7, 8}}
-	got := input.AggregateIUnsafe(func(k bool, y iters.Collection[int]) any {
+	got := input.AggregateIUnsafe(func(k bool, y iters.Iter[int]) any {
 		if k {
 			return 1
 		}
@@ -57,7 +57,7 @@ func TestAggregateIGUnsafe(t *testing.T) {
 
 func TestAggregateG(t *testing.T) {
 	input := iters.Aggregable[bool, int, int]{false: {1, 2, 3, 4}, true: {5, 6, 7, 8}}
-	got := input.Aggregate(func(y iters.Collection[int]) int { return 1 })
+	got := input.Aggregate(func(y iters.Iter[int]) int { return 1 })
 	want := map[bool]int{false: 1, true: 1}
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("AggregateG() = %v, want %v", got, want)
@@ -66,7 +66,7 @@ func TestAggregateG(t *testing.T) {
 
 func TestAggregateIG(t *testing.T) {
 	input := iters.Aggregable[bool, int, int]{false: {1, 2, 3, 4}, true: {5, 6, 7, 8}}
-	got := input.AggregateI(func(k bool, y iters.Collection[int]) int {
+	got := input.AggregateI(func(k bool, y iters.Iter[int]) int {
 		if k {
 			return 1
 		}

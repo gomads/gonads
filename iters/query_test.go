@@ -150,7 +150,7 @@ func TestEmptySliceQueriesStatic(t *testing.T) {
 }
 
 func TestFind(t *testing.T) {
-	ints := iters.Collection[int]{1, 2, 3, 4}
+	ints := iters.Iter[int]{1, 2, 3, 4}
 	if v, ok := ints.Find(func(x int) bool { return x == 3 }); !ok || v != 3 {
 		t.Errorf("funcs.Find() = (%d, %v), want (3, true)", v, ok)
 	}
@@ -161,7 +161,7 @@ func TestFind(t *testing.T) {
 }
 
 func TestFindIndex(t *testing.T) {
-	ints := iters.Collection[int]{1, 2, 3, 4}
+	ints := iters.Iter[int]{1, 2, 3, 4}
 	index := ints.FindIndex(func(x int) bool { return x == 3 })
 	if index != 2 {
 		t.Errorf("funcs.FindIndex() = %d, want %d", index, 2)
@@ -174,7 +174,7 @@ func TestFindIndex(t *testing.T) {
 }
 
 func TestFindFirst(t *testing.T) {
-	strs := iters.Collection[string]{"apple", "banana", "cherry", "bana"}
+	strs := iters.Iter[string]{"apple", "banana", "cherry", "bana"}
 	if v, ok := strs.FindFirst(func(s string) bool { return strings.HasPrefix(s, "ban") }); !ok ||
 		v != "banana" {
 		t.Errorf("funcs.FindFirst() = (%s, %v), want (banana, true)", v, ok)
@@ -186,7 +186,7 @@ func TestFindFirst(t *testing.T) {
 }
 
 func TestFindLast(t *testing.T) {
-	strs := iters.Collection[string]{"apple", "bana", "cherry", "banana"}
+	strs := iters.Iter[string]{"apple", "bana", "cherry", "banana"}
 	if v, ok := strs.FindLast(func(s string) bool { return strings.HasPrefix(s, "ban") }); !ok ||
 		v != "banana" {
 		t.Errorf("funcs.FindLast() = (%s, %v), want (banana, true)", v, ok)
@@ -198,7 +198,7 @@ func TestFindLast(t *testing.T) {
 }
 
 func TestSome(t *testing.T) {
-	ints := iters.Collection[int]{1, 2, 3, 4}
+	ints := iters.Iter[int]{1, 2, 3, 4}
 	if !ints.Some(func(x int) bool { return x > 3 }) {
 		t.Errorf("funcs.Some() returned false, want true")
 	}
@@ -208,29 +208,29 @@ func TestSome(t *testing.T) {
 }
 
 func TestAll(t *testing.T) {
-	ints := iters.Collection[int]{2, 4, 6, 8}
+	ints := iters.Iter[int]{2, 4, 6, 8}
 	if !ints.All(func(x int) bool { return x%2 == 0 }) {
 		t.Errorf("funcs.All() returned false, want true")
 	}
-	mixed := iters.Collection[int]{2, 4, 5, 8}
+	mixed := iters.Iter[int]{2, 4, 5, 8}
 	if mixed.All(func(x int) bool { return x%2 == 0 }) {
 		t.Errorf("funcs.All() returned true, want false")
 	}
 }
 
 func TestNone(t *testing.T) {
-	ints := iters.Collection[int]{1, 3, 5, 7}
+	ints := iters.Iter[int]{1, 3, 5, 7}
 	if !ints.None(func(x int) bool { return x%2 == 0 }) {
 		t.Errorf("funcs.None() returned false, want true")
 	}
-	mixed := iters.Collection[int]{1, 3, 4, 7}
+	mixed := iters.Iter[int]{1, 3, 4, 7}
 	if mixed.None(func(x int) bool { return x%2 == 0 }) {
 		t.Errorf("funcs.None() returned true, want false")
 	}
 }
 
 func TestCount(t *testing.T) {
-	ints := iters.Collection[int]{1, 2, 3, 4, 5, 6}
+	ints := iters.Iter[int]{1, 2, 3, 4, 5, 6}
 	count := ints.Count(func(x int) bool { return x%2 == 0 })
 	if count != 3 {
 		t.Errorf("funcs.Count() = %d, want %d", count, 3)
@@ -243,7 +243,7 @@ func TestCount(t *testing.T) {
 }
 
 func TestFindOnStrings(t *testing.T) {
-	strs := iters.Collection[string]{"alpha", "beta", "gamma", "delta"}
+	strs := iters.Iter[string]{"alpha", "beta", "gamma", "delta"}
 	if v, ok := strs.Find(func(s string) bool { return len(s) == 5 }); !ok || v != "alpha" {
 		t.Errorf("funcs.Find() on strings = (%s, %v), want (alpha, true)", v, ok)
 	}
@@ -260,7 +260,7 @@ func TestFindOnStrings(t *testing.T) {
 }
 
 func TestEmptySliceQueries(t *testing.T) {
-	var ints iters.Collection[int]
+	var ints iters.Iter[int]
 	if _, ok := ints.Find(func(x int) bool { return true }); ok {
 		t.Errorf("funcs.Find() on empty slice returned true, want false")
 	}

@@ -5,7 +5,7 @@ package iters
 // Type signature:
 //
 //	Aggregate :: Grouping K [T] -> ([T] -> R) -> Map K R
-func Aggregate[K comparable, T, R any](g Grouping[K, T], agg func(items Collection[T]) R) map[K]R {
+func Aggregate[K comparable, T, R any](g Grouping[K, T], agg func(items Iter[T]) R) map[K]R {
 	result := make(map[K]R, len(g))
 	for k, items := range g {
 		result[k] = agg(items)
@@ -18,7 +18,7 @@ func Aggregate[K comparable, T, R any](g Grouping[K, T], agg func(items Collecti
 // Type signature:
 //
 //	AggregateI :: Grouping K [T] -> ((K, [T]) -> R) -> Map K R
-func AggregateI[K comparable, T, R any](g Grouping[K, T], agg func(key K, items Collection[T]) R) map[K]R {
+func AggregateI[K comparable, T, R any](g Grouping[K, T], agg func(key K, items Iter[T]) R) map[K]R {
 	result := make(map[K]R, len(g))
 	for k, items := range g {
 		result[k] = agg(k, items)
@@ -31,7 +31,7 @@ func AggregateI[K comparable, T, R any](g Grouping[K, T], agg func(key K, items 
 // Type signature:
 //
 //	Aggregate :: Grouping K [T] -> ((T] -> any) -> Map K any
-func (gq Aggregable[K, T, R]) Aggregate(agg func(items Collection[T]) R) map[K]R {
+func (gq Aggregable[K, T, R]) Aggregate(agg func(items Iter[T]) R) map[K]R {
 	return Aggregate(gq.ToGrouping(), agg)
 }
 
@@ -40,7 +40,7 @@ func (gq Aggregable[K, T, R]) Aggregate(agg func(items Collection[T]) R) map[K]R
 // Type signature:
 //
 //	AggregateI :: Grouping K [T] -> ((K, [T]) -> any) -> Map K any
-func (gq Aggregable[K, T, R]) AggregateI(agg func(key K, items Collection[T]) R) map[K]R {
+func (gq Aggregable[K, T, R]) AggregateI(agg func(key K, items Iter[T]) R) map[K]R {
 	return AggregateI(gq.ToGrouping(), agg)
 }
 
@@ -52,7 +52,7 @@ func (gq Aggregable[K, T, R]) AggregateI(agg func(key K, items Collection[T]) R)
 // Type signature:
 //
 //	Aggregate :: Grouping K [T] -> ((T] -> any) -> Map K any
-func (gq Grouping[K, T]) AggregateUnsafe(agg func(items Collection[T]) any) map[K]any {
+func (gq Grouping[K, T]) AggregateUnsafe(agg func(items Iter[T]) any) map[K]any {
 	return Aggregate(gq, agg)
 }
 
@@ -64,6 +64,6 @@ func (gq Grouping[K, T]) AggregateUnsafe(agg func(items Collection[T]) any) map[
 // Type signature:
 //
 //	AggregateI :: Grouping K [T] -> ((K, [T]) -> any) -> Map K any
-func (gq Grouping[K, T]) AggregateIUnsafe(agg func(key K, items Collection[T]) any) map[K]any {
+func (gq Grouping[K, T]) AggregateIUnsafe(agg func(key K, items Iter[T]) any) map[K]any {
 	return AggregateI(gq, agg)
 }

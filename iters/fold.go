@@ -102,7 +102,7 @@ func (s Mappable[T, A]) FoldI(init A, f func(int, A, T) A) A {
 // Type signature:
 //
 //	Fold :: [T] -> A -> ((A, T) -> A) -> A
-func (s Collection[T]) FoldUnsafe(init any, f func(any, T) any) any {
+func (s Iter[T]) FoldUnsafe(init any, f func(any, T) any) any {
 	return Fold(s, init, f)
 }
 
@@ -111,6 +111,6 @@ func (s Collection[T]) FoldUnsafe(init any, f func(any, T) any) any {
 // Type signature:
 //
 //	FoldI :: [T] -> A -> ((Int, A, T) -> A) -> A
-func (s Collection[T]) FoldIUnsafe(init any, f func(int, any, T) any) any {
+func (s Iter[T]) FoldIUnsafe(init any, f func(int, any, T) any) any {
 	return FoldI(s, init, f)
 }

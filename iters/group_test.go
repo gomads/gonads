@@ -8,7 +8,7 @@ import (
 )
 
 func TestGroupByStatic(t *testing.T) {
-	input := iters.Collection[int]{1, 2, 3, 4, 5, 6}
+	input := iters.Iter[int]{1, 2, 3, 4, 5, 6}
 	got := iters.GroupBy(input, func(x int) bool {
 		return x%2 == 0
 	})
@@ -22,7 +22,7 @@ func TestGroupByStatic(t *testing.T) {
 }
 
 func TestGroupByIStatic(t *testing.T) {
-	input := iters.Collection[string]{"apple", "banana", "apricot", "blueberry", "avocado"}
+	input := iters.Iter[string]{"apple", "banana", "apricot", "blueberry", "avocado"}
 	got := iters.GroupByI(input, func(i int, s string) string {
 		if i%2 == 0 {
 			return "even"
@@ -39,7 +39,7 @@ func TestGroupByIStatic(t *testing.T) {
 }
 
 func TestGroupByUnsafe(t *testing.T) {
-	input := iters.Collection[int]{1, 2, 3, 4, 5, 6}
+	input := iters.Iter[int]{1, 2, 3, 4, 5, 6}
 	got := input.GroupByUnsafe(func(x int) any {
 		return x%2 == 0
 	})
@@ -53,7 +53,7 @@ func TestGroupByUnsafe(t *testing.T) {
 }
 
 func TestGroupByIUnsafe(t *testing.T) {
-	input := iters.Collection[string]{"apple", "banana", "apricot", "blueberry", "avocado"}
+	input := iters.Iter[string]{"apple", "banana", "apricot", "blueberry", "avocado"}
 	got := input.GroupByIUnsafe(func(i int, s string) any {
 		if i%2 == 0 {
 			return "even"

@@ -8,7 +8,7 @@ package iters
 //
 // Returns a map where each key is produced by f and the corresponding value is a slice of all
 // elements for which f returned that key.
-func GroupBy[T any, K comparable](s Collection[T], f func(T) K) Grouping[K, T] {
+func GroupBy[T any, K comparable](s Iter[T], f func(T) K) Grouping[K, T] {
 	groups := make(map[K][]T)
 	for _, v := range s {
 		key := f(v)
@@ -26,7 +26,7 @@ func GroupBy[T any, K comparable](s Collection[T], f func(T) K) Grouping[K, T] {
 //
 // Returns a map where each key is produced by f and the corresponding value is a slice of all
 // elements for which f returned that key.
-func GroupByI[T any, K comparable](s Collection[T], f func(int, T) K) Grouping[K, T] {
+func GroupByI[T any, K comparable](s Iter[T], f func(int, T) K) Grouping[K, T] {
 	groups := make(map[K][]T)
 	for i, v := range s {
 		key := f(i, v)
@@ -43,7 +43,7 @@ func GroupByI[T any, K comparable](s Collection[T], f func(int, T) K) Grouping[K
 //
 // Returns a map where each key is produced by f and the corresponding value is a slice of all
 // elements for which f returned that key.
-func (s Collection[T]) GroupByUnsafe(f func(T) any) Grouping[any, T] {
+func (s Iter[T]) GroupByUnsafe(f func(T) any) Grouping[any, T] {
 	return GroupBy(s, f)
 }
 
@@ -59,6 +59,6 @@ func (s Collection[T]) GroupByUnsafe(f func(T) any) Grouping[any, T] {
 //
 // Returns a map where each key is produced by f and the corresponding value is a slice of all
 // elements for which f returned that key.
-func (s Collection[T]) GroupByIUnsafe(f func(int, T) any) Grouping[any, T] {
+func (s Iter[T]) GroupByIUnsafe(f func(int, T) any) Grouping[any, T] {
 	return GroupByI(s, f)
 }

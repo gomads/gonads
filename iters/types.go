@@ -1,8 +1,8 @@
 package iters
 
-type Collection[T any] []T
+type Iter[T any] []T
 
-type Mappable[T, R any] Collection[T]
+type Mappable[T, R any] Iter[T]
 
 type Grouping[K comparable, T any] map[K][]T
 
@@ -12,7 +12,7 @@ func LiftMap[T, R any](data []T) Mappable[T, R] {
 	return data
 }
 
-func LiftSlice[T any](data []T) Collection[T] {
+func LiftSlice[T any](data []T) Iter[T] {
 	return data
 }
 
@@ -20,11 +20,11 @@ func LiftAggregable[K comparable, T, R any](data Grouping[K, T]) Aggregable[K, T
 	return (Aggregable[K, T, R])(data)
 }
 
-func (s Collection[T]) ToSlice() []T {
+func (s Iter[T]) ToSlice() []T {
 	return s
 }
 
-func (s Mappable[T, R]) ToCollection() Collection[T] {
+func (s Mappable[T, R]) ToIter() Iter[T] {
 	return ([]T)(s)
 }
 

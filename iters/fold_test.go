@@ -50,7 +50,7 @@ func TestFoldI(t *testing.T) {
 }
 
 func TestFoldUnsafe(t *testing.T) {
-	input := iters.Collection[int]{1, 2, 3, 4}
+	input := iters.Iter[int]{1, 2, 3, 4}
 	sum := input.FoldUnsafe(0, func(acc any, x int) any {
 		return acc.(int) + x
 	})
@@ -60,7 +60,7 @@ func TestFoldUnsafe(t *testing.T) {
 }
 
 func TestFoldIUnsafe(t *testing.T) {
-	input := iters.Collection[int]{1, 2, 3, 4}
+	input := iters.Iter[int]{1, 2, 3, 4}
 	// Calculation: 0*1 + 1*2 + 2*3 + 3*4 = 0 + 2 + 6 + 12 = 20.
 	result := input.FoldIUnsafe(0, func(i int, acc any, x int) any {
 		return acc.(int) + i*x

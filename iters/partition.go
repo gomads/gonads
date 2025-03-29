@@ -8,7 +8,7 @@ package iters
 //
 // Returns two slices: the first containing elements that satisfy f,
 // and the second containing elements that do not.
-func Partition[T any](s []T, f func(T) bool) (Collection[T], Collection[T]) {
+func Partition[T any](s []T, f func(T) bool) (Iter[T], Iter[T]) {
 	var yes, no []T
 	for _, v := range s {
 		if f(v) {
@@ -28,7 +28,7 @@ func Partition[T any](s []T, f func(T) bool) (Collection[T], Collection[T]) {
 //	PartitionI :: [T] -> ((Int, T) -> bool) -> ([T], [T])
 //
 // Returns two slices: the first with elements that satisfy f, and the second with those that don't.
-func PartitionI[T any](s []T, f func(int, T) bool) (Collection[T], Collection[T]) {
+func PartitionI[T any](s []T, f func(int, T) bool) (Iter[T], Iter[T]) {
 	var yes, no []T
 	for i, v := range s {
 		if f(i, v) {
@@ -48,7 +48,7 @@ func PartitionI[T any](s []T, f func(int, T) bool) (Collection[T], Collection[T]
 //
 // Returns two slices: the first containing elements that satisfy f,
 // and the second containing elements that do not.
-func (s Collection[T]) Partition(f func(T) bool) (Collection[T], Collection[T]) {
+func (s Iter[T]) Partition(f func(T) bool) (Iter[T], Iter[T]) {
 	var yes, no []T
 	for _, v := range s {
 		if f(v) {
@@ -68,7 +68,7 @@ func (s Collection[T]) Partition(f func(T) bool) (Collection[T], Collection[T]) 
 //	PartitionI :: [T] -> ((Int, T) -> bool) -> ([T], [T])
 //
 // Returns two slices: the first with elements that satisfy f, and the second with those that don't.
-func (s Collection[T]) PartitionI(f func(int, T) bool) (Collection[T], Collection[T]) {
+func (s Iter[T]) PartitionI(f func(int, T) bool) (Iter[T], Iter[T]) {
 	var yes, no []T
 	for i, v := range s {
 		if f(i, v) {

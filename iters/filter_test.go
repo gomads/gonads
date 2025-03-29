@@ -32,23 +32,23 @@ func TestFilterIStatic(t *testing.T) {
 }
 
 func TestFilter(t *testing.T) {
-	input := iters.Collection[int]{1, 2, 3, 4, 5, 6}
+	input := iters.Iter[int]{1, 2, 3, 4, 5, 6}
 	got := input.Filter(func(x int) bool {
 		return x%2 == 0
 	})
 
-	want := iters.Collection[int]{2, 4, 6}
+	want := iters.Iter[int]{2, 4, 6}
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("Filter() = %v, want %v", got, want)
 	}
 }
 
 func TestFilterI(t *testing.T) {
-	input := iters.Collection[string]{"a", "b", "c", "d"}
+	input := iters.Iter[string]{"a", "b", "c", "d"}
 	got := input.FilterI(func(i int, s string) bool {
 		return i%2 != 0
 	})
-	want := iters.Collection[string]{"b", "d"}
+	want := iters.Iter[string]{"b", "d"}
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("FilterI() = %v, want %v", got, want)
 	}

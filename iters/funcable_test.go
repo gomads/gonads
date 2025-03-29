@@ -2,7 +2,7 @@ package iters_test
 
 import "github.com/alsi-lawr/gonads/iters"
 
-func AnyDeepEqual[T comparable](a []any, s iters.Collection[T]) bool {
+func AnyDeepEqual[T comparable](a []any, s iters.Iter[T]) bool {
 	if len(a) != len(s) {
 		return false
 	}

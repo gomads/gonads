@@ -107,7 +107,7 @@ func FilterStringI(s string, f func(int, rune) bool) string {
 // Type signature:
 //
 //	Filter :: [T] -> (T -> bool) -> [T]
-func (s Collection[T]) Filter(f func(T) bool) Collection[T] {
+func (s Iter[T]) Filter(f func(T) bool) Iter[T] {
 	return Filter(s, f)
 }
 
@@ -117,6 +117,6 @@ func (s Collection[T]) Filter(f func(T) bool) Collection[T] {
 // Type signature:
 //
 //	FilterI :: [T] -> ((Int, T) -> bool) -> [T]
-func (s Collection[T]) FilterI(f func(int, T) bool) Collection[T] {
+func (s Iter[T]) FilterI(f func(int, T) bool) Iter[T] {
 	return FilterI(s, f)
 }

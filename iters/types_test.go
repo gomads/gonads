@@ -9,7 +9,7 @@ import (
 
 func TestLiftSlice(t *testing.T) {
 	got := iters.LiftSlice([]int{1, 2, 3})
-	want := iters.Collection[int]{1, 2, 3}
+	want := iters.Iter[int]{1, 2, 3}
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("LiftSlice() = %v, want %v", got, want)
 	}
@@ -39,18 +39,18 @@ func TestLiftAggregable(t *testing.T) {
 }
 
 func TestToSlice(t *testing.T) {
-	got := iters.Collection[int]{1, 2, 3}.ToSlice()
+	got := iters.Iter[int]{1, 2, 3}.ToSlice()
 	want := []int{1, 2, 3}
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("ToSlice() = %v, want %v", got, want)
 	}
 }
 
-func TestToCollection(t *testing.T) {
-	got := iters.Mappable[int, int]{1, 2, 3}.ToCollection()
-	want := iters.Collection[int]{1, 2, 3}
+func TestToIter(t *testing.T) {
+	got := iters.Mappable[int, int]{1, 2, 3}.ToIter()
+	want := iters.Iter[int]{1, 2, 3}
 	if !reflect.DeepEqual(got, want) {
-		t.Errorf("ToCollection() = %v, want %v", got, want)
+		t.Errorf("ToIter() = %v, want %v", got, want)
 	}
 }
 
