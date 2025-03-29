@@ -19,11 +19,18 @@
 
 ## 💡 Features of `gonads`
 
+### Monads
+
 Currently supported monads:
 
 - **`Option[T]`**, also called a **`Maybe`**: provides a concise and safe way to wrap optional values, enforcing `nil` checks as a drop-in replacement for `nil`-able types.
 - **`Either[L, R]`**: provides a concise and safe way to create unions, allowing for enforced union type checking through `Left` and `Right` conditional evaluation.
 - **`Result[T]`**: provides the ability to create a strongly typed return type for `error` to enforce error handling.
+
+### Iters
+
+- **`Iter[T]`**: provides a concise and safe way to iterate over collections using function chains.
+- Several intermediary types to provide access to chainable methods by encoding generic types in intermediaries.
 
 ## 🚀 Getting Started
 
