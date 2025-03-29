@@ -8,7 +8,7 @@ import (
 	"github.com/alsi-lawr/gonads/iters"
 )
 
-func TestFilter(t *testing.T) {
+func TestFilterStatic(t *testing.T) {
 	input := []int{1, 2, 3, 4, 5, 6}
 	got := iters.Filter(input, func(x int) bool {
 		return x%2 == 0
@@ -20,12 +20,35 @@ func TestFilter(t *testing.T) {
 	}
 }
 
-func TestFilterI(t *testing.T) {
+func TestFilterIStatic(t *testing.T) {
 	input := []string{"a", "b", "c", "d"}
 	got := iters.FilterI(input, func(i int, s string) bool {
 		return i%2 != 0
 	})
 	want := []string{"b", "d"}
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("FilterI() = %v, want %v", got, want)
+	}
+}
+
+func TestFilter(t *testing.T) {
+	input := iters.Collection[int]{1, 2, 3, 4, 5, 6}
+	got := input.Filter(func(x int) bool {
+		return x%2 == 0
+	})
+
+	want := iters.Collection[int]{2, 4, 6}
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("Filter() = %v, want %v", got, want)
+	}
+}
+
+func TestFilterI(t *testing.T) {
+	input := iters.Collection[string]{"a", "b", "c", "d"}
+	got := input.FilterI(func(i int, s string) bool {
+		return i%2 != 0
+	})
+	want := iters.Collection[string]{"b", "d"}
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("FilterI() = %v, want %v", got, want)
 	}

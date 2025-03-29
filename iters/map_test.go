@@ -129,7 +129,6 @@ func TestMapStringStatic(t *testing.T) {
 func TestMapStringIStatic(t *testing.T) {
 	input := "abc"
 	got := iters.MapStringI(input, func(i int, r rune) rune {
-
 		return r + rune(i)
 	})
 	// 'a' + 0 = 'a', 'b' + 1 = 'c', 'c' + 2 = 'e'
@@ -141,7 +140,7 @@ func TestMapStringIStatic(t *testing.T) {
 
 func TestMap(t *testing.T) {
 	input := iters.LiftMap[int, int]([]int{1, 2, 3})
-	want := iters.LiftSlice([]int{2, 4, 6})
+	want := iters.Collection[int]{2, 4, 6}
 	got := input.Map(func(x int) int { return x * 2 })
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("Map() = %v, want %v", got, want)
@@ -150,7 +149,7 @@ func TestMap(t *testing.T) {
 
 func TestMapI(t *testing.T) {
 	input := iters.LiftMap[string, string]([]string{"a", "b", "c"})
-	want := iters.LiftSlice([]string{"0:a", "1:b", "2:c"})
+	want := iters.Collection[string]{"0:a", "1:b", "2:c"}
 	got := input.MapI(
 		func(i int, s string) string { return strings.Join([]string{fmt.Sprint(i), ":", s}, "") },
 	)
@@ -161,7 +160,7 @@ func TestMapI(t *testing.T) {
 
 func TestMapErr_Success(t *testing.T) {
 	input := iters.LiftMap[int, int]([]int{1, 2, 3})
-	want := iters.LiftSlice([]int{2, 4, 6})
+	want := iters.Collection[int]{2, 4, 6}
 	got, err := input.MapErr(func(x int) (int, error) { return x * 2, nil })
 	if err != nil {
 		t.Fatalf("MapErr() unexpected error: %v", err)
@@ -191,8 +190,8 @@ func TestMapErr_Error(t *testing.T) {
 }
 
 func TestMapUnsafe(t *testing.T) {
-	input := iters.LiftSlice([]int{1, 2, 3})
-	want := iters.LiftSlice([]int{2, 4, 6})
+	input := iters.Collection[int]{1, 2, 3}
+	want := iters.Collection[int]{2, 4, 6}
 	got := input.MapUnsafe(func(x int) any { return x * 2 })
 	if !AnyDeepEqual(got, want) {
 		t.Errorf("Map() = %v, want %v", got, want)
@@ -200,8 +199,8 @@ func TestMapUnsafe(t *testing.T) {
 }
 
 func TestMapIUnsafe(t *testing.T) {
-	input := iters.LiftSlice([]string{"a", "b", "c"})
-	want := iters.LiftSlice([]string{"0:a", "1:b", "2:c"})
+	input := iters.Collection[string]{"a", "b", "c"}
+	want := iters.Collection[string]{"0:a", "1:b", "2:c"}
 	got := input.MapIUnsafe(
 		func(i int, s string) any { return strings.Join([]string{fmt.Sprint(i), ":", s}, "") },
 	)
@@ -211,8 +210,8 @@ func TestMapIUnsafe(t *testing.T) {
 }
 
 func TestMapErr_SuccessUnsafe(t *testing.T) {
-	input := iters.LiftSlice([]int{1, 2, 3})
-	want := iters.LiftSlice([]int{2, 4, 6})
+	input := iters.Collection[int]{1, 2, 3}
+	want := iters.Collection[int]{2, 4, 6}
 	got, err := input.MapErrUnsafe(func(x int) (any, error) { return x * 2, nil })
 	if err != nil {
 		t.Fatalf("MapErr() unexpected error: %v", err)
@@ -223,7 +222,7 @@ func TestMapErr_SuccessUnsafe(t *testing.T) {
 }
 
 func TestMapErr_ErrorUnsafe(t *testing.T) {
-	input := iters.LiftSlice([]int{1, 2, 3})
+	input := iters.Collection[int]{1, 2, 3}
 	testErr := errors.New("error at 2")
 	_, err := input.MapErrUnsafe(func(x int) (any, error) {
 		if x == 2 {

@@ -33,6 +33,7 @@ func FilterI[T any](s []T, f func(int, T) bool) []T {
 
 // FilterMap applies a predicate to each key/value pair of a map,
 // returning a new map containing only the pairs that satisfy the predicate.
+//
 // Type signature:
 //
 //	FilterMap :: Map K V -> ((K, V) -> bool) -> Map K V
@@ -107,7 +108,7 @@ func FilterStringI(s string, f func(int, rune) bool) string {
 //
 //	Filter :: [T] -> (T -> bool) -> [T]
 func (s Collection[T]) Filter(f func(T) bool) Collection[T] {
-	return LiftSlice(Filter(s, f))
+	return Filter(s, f)
 }
 
 // FilterI applies a predicate to each element of a slice along with its index,
@@ -117,5 +118,5 @@ func (s Collection[T]) Filter(f func(T) bool) Collection[T] {
 //
 //	FilterI :: [T] -> ((Int, T) -> bool) -> [T]
 func (s Collection[T]) FilterI(f func(int, T) bool) Collection[T] {
-	return LiftSlice(FilterI(s, f))
+	return FilterI(s, f)
 }

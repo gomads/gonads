@@ -7,7 +7,7 @@ import (
 	"github.com/alsi-lawr/gonads/iters"
 )
 
-func TestFold(t *testing.T) {
+func TestFoldStatic(t *testing.T) {
 	input := []int{1, 2, 3, 4}
 	sum := iters.Fold(input, 0, func(acc, x int) int {
 		return acc + x
@@ -17,7 +17,7 @@ func TestFold(t *testing.T) {
 	}
 }
 
-func TestFoldI(t *testing.T) {
+func TestFoldIStatic(t *testing.T) {
 	input := []int{1, 2, 3, 4}
 	// Calculation: 0*1 + 1*2 + 2*3 + 3*4 = 0 + 2 + 6 + 12 = 20.
 	result := iters.FoldI(input, 0, func(i, acc, x int) int {
@@ -28,7 +28,49 @@ func TestFoldI(t *testing.T) {
 	}
 }
 
-func TestFoldMap(t *testing.T) {
+func TestFold(t *testing.T) {
+	input := iters.Mappable[int, int]{1, 2, 3, 4}
+	sum := input.Fold(0, func(acc, x int) int {
+		return acc + x
+	})
+	if sum != 10 {
+		t.Errorf("funcs.Fold() = %d, want %d", sum, 10)
+	}
+}
+
+func TestFoldI(t *testing.T) {
+	input := iters.Mappable[int, int]{1, 2, 3, 4}
+	// Calculation: 0*1 + 1*2 + 2*3 + 3*4 = 0 + 2 + 6 + 12 = 20.
+	result := input.FoldI(0, func(i, acc, x int) int {
+		return acc + i*x
+	})
+	if result != 20 {
+		t.Errorf("funcs.FoldI() = %d, want %d", result, 20)
+	}
+}
+
+func TestFoldUnsafe(t *testing.T) {
+	input := iters.Collection[int]{1, 2, 3, 4}
+	sum := input.FoldUnsafe(0, func(acc any, x int) any {
+		return acc.(int) + x
+	})
+	if sum != 10 {
+		t.Errorf("funcs.Fold() = %d, want %d", sum, 10)
+	}
+}
+
+func TestFoldIUnsafe(t *testing.T) {
+	input := iters.Collection[int]{1, 2, 3, 4}
+	// Calculation: 0*1 + 1*2 + 2*3 + 3*4 = 0 + 2 + 6 + 12 = 20.
+	result := input.FoldIUnsafe(0, func(i int, acc any, x int) any {
+		return acc.(int) + i*x
+	})
+	if result != 20 {
+		t.Errorf("funcs.FoldI() = %d, want %d", result, 20)
+	}
+}
+
+func TestFoldMapStatic(t *testing.T) {
 	input := map[string]int{"a": 1, "b": 2, "c": 3}
 	sum := iters.FoldMap(input, 0, func(acc int, k string, v int) int {
 		return acc + v
@@ -38,7 +80,7 @@ func TestFoldMap(t *testing.T) {
 	}
 }
 
-func TestFoldChan(t *testing.T) {
+func TestFoldChanStatic(t *testing.T) {
 	ch := make(chan int, 4)
 	nums := []int{1, 2, 3, 4}
 	for _, n := range nums {
@@ -54,7 +96,7 @@ func TestFoldChan(t *testing.T) {
 	}
 }
 
-func TestFoldString(t *testing.T) {
+func TestFoldStringStatic(t *testing.T) {
 	s := "ABC" // 'A'=65, 'B'=66, 'C'=67
 	sum := iters.FoldString(s, 0, func(acc int, r rune) int {
 		return acc + int(r)
@@ -73,11 +115,10 @@ func TestFoldStringI(t *testing.T) {
 	})
 	if result != 201 {
 		t.Errorf("funcs.FoldStringI() = %d, want %d", result, 201)
-
 	}
 }
 
-func TestFoldEmptySlice(t *testing.T) {
+func TestFoldEmptySliceStatic(t *testing.T) {
 	input := []int{}
 	sum := iters.Fold(input, 100, func(acc, x int) int {
 		return acc + x
@@ -87,7 +128,7 @@ func TestFoldEmptySlice(t *testing.T) {
 	}
 }
 
-func TestFoldMapEmpty(t *testing.T) {
+func TestFoldMapEmptyStatic(t *testing.T) {
 	input := map[string]int{}
 	sum := iters.FoldMap(input, 50, func(acc int, k string, v int) int {
 		return acc + v
@@ -97,7 +138,7 @@ func TestFoldMapEmpty(t *testing.T) {
 	}
 }
 
-func TestFoldChanEmpty(t *testing.T) {
+func TestFoldChanEmptyStatic(t *testing.T) {
 	ch := make(chan int)
 	close(ch)
 	sum := iters.FoldChan(ch, 200, func(acc, x int) int {
@@ -108,7 +149,7 @@ func TestFoldChanEmpty(t *testing.T) {
 	}
 }
 
-func TestFoldBuildSlice(t *testing.T) {
+func TestFoldBuildSliceStatic(t *testing.T) {
 	input := []string{"a", "b", "c"}
 	result := iters.Fold(input, []string{}, func(acc []string, s string) []string {
 		return append(acc, s+"1")
