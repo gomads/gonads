@@ -15,55 +15,10 @@ func TestLiftSlice(t *testing.T) {
 	}
 }
 
-func TestLiftMap(t *testing.T) {
-	got := iters.LiftMap[int, int]([]int{1, 2, 3})
-	want := iters.Mappable[int, int]{1, 2, 3}
-	if !reflect.DeepEqual(got, want) {
-		t.Errorf("LiftMap() = %v, want %v", got, want)
-	}
-}
-
-func TestLiftAggregable(t *testing.T) {
-	got := iters.LiftAggregable[int, int, int](
-		map[int][]int{
-			1: {1, 2, 3},
-			2: {4, 5, 6},
-		})
-	want := iters.Aggregable[int, int, int]{
-		1: {1, 2, 3},
-		2: {4, 5, 6},
-	}
-	if !reflect.DeepEqual(got, want) {
-		t.Errorf("LiftAggregable() = %v, want %v", got, want)
-	}
-}
-
 func TestToSlice(t *testing.T) {
 	got := iters.Iter[int]{1, 2, 3}.ToSlice()
 	want := []int{1, 2, 3}
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("ToSlice() = %v, want %v", got, want)
-	}
-}
-
-func TestToIter(t *testing.T) {
-	got := iters.Mappable[int, int]{1, 2, 3}.ToIter()
-	want := iters.Iter[int]{1, 2, 3}
-	if !reflect.DeepEqual(got, want) {
-		t.Errorf("ToIter() = %v, want %v", got, want)
-	}
-}
-
-func TestToGrouping(t *testing.T) {
-	got := iters.Aggregable[int, int, int]{
-		1: {1, 2, 3},
-		2: {4, 5, 6},
-	}.ToGrouping()
-	want := iters.Grouping[int, int]{
-		1: {1, 2, 3},
-		2: {4, 5, 6},
-	}
-	if !reflect.DeepEqual(got, want) {
-		t.Errorf("ToGrouping() = %v, want %v", got, want)
 	}
 }

@@ -1,6 +1,7 @@
 package iters_test
 
 import (
+	"fmt"
 	"reflect"
 	"testing"
 
@@ -29,8 +30,8 @@ func TestFoldIStatic(t *testing.T) {
 }
 
 func TestFold(t *testing.T) {
-	input := iters.Mappable[int, int]{1, 2, 3, 4}
-	sum := input.Fold(0, func(acc, x int) int {
+	input := iters.Iter[int]{1, 2, 3, 4}
+	sum := input.Fold[int](0, func(acc, x int) int {
 		return acc + x
 	})
 	if sum != 10 {
@@ -38,32 +39,21 @@ func TestFold(t *testing.T) {
 	}
 }
 
+func TestFoldChangeType(t *testing.T) {
+	input := iters.Iter[int]{1, 2, 3, 4}
+	got := input.Fold[string]("", func(acc string, x int) string {
+		return acc + fmt.Sprint(x)
+	})
+	if got != "1234" {
+		t.Errorf("funcs.Fold() = %q, want %q", got, "1234")
+	}
+}
+
 func TestFoldI(t *testing.T) {
-	input := iters.Mappable[int, int]{1, 2, 3, 4}
+	input := iters.Iter[int]{1, 2, 3, 4}
 	// Calculation: 0*1 + 1*2 + 2*3 + 3*4 = 0 + 2 + 6 + 12 = 20.
-	result := input.FoldI(0, func(i, acc, x int) int {
+	result := input.FoldI[int](0, func(i, acc, x int) int {
 		return acc + i*x
-	})
-	if result != 20 {
-		t.Errorf("funcs.FoldI() = %d, want %d", result, 20)
-	}
-}
-
-func TestFoldUnsafe(t *testing.T) {
-	input := iters.Iter[int]{1, 2, 3, 4}
-	sum := input.FoldUnsafe(0, func(acc any, x int) any {
-		return acc.(int) + x
-	})
-	if sum != 10 {
-		t.Errorf("funcs.Fold() = %d, want %d", sum, 10)
-	}
-}
-
-func TestFoldIUnsafe(t *testing.T) {
-	input := iters.Iter[int]{1, 2, 3, 4}
-	// Calculation: 0*1 + 1*2 + 2*3 + 3*4 = 0 + 2 + 6 + 12 = 20.
-	result := input.FoldIUnsafe(0, func(i int, acc any, x int) any {
-		return acc.(int) + i*x
 	})
 	if result != 20 {
 		t.Errorf("funcs.FoldI() = %d, want %d", result, 20)
