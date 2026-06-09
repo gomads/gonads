@@ -1,7 +1,7 @@
 # Gonads | Golang
 
 [![ver](https://img.shields.io/github/tag/alsi-lawr/gonads)](https://github.com/alsi-lawr/gonads/releases)
-![Gover](https://img.shields.io/badge/Go-%3E%3D%201.18-%23007d9c)
+![Gover](https://img.shields.io/badge/Go-%3E%3D%201.27-%23007d9c)
 [![Godoc](https://godoc.org/github.com/alsi-lawr/gonads?status.svg)](https://pkg.go.dev/github.com/alsi-lawr/gonads)
 [![Goreport](https://goreportcard.com/badge/github.com/alsi-lawr/gonads)](https://goreportcard.com/report/github.com/alsi-lawr/gonads)
 [![codecov](https://codecov.io/gh/alsi-lawr/gonads/graph/badge.svg?token=FyxqW2TQEY)](https://codecov.io/gh/alsi-lawr/gonads)
@@ -29,8 +29,8 @@ Currently supported monads:
 
 ### Iters
 
-- **`Iter[T]`**: provides a concise and safe way to iterate over collections using function chains.
-- Several intermediary types to provide access to chainable methods by encoding generic types in intermediaries.
+- **`Iter[T]`**: provides a concise and safe way to iterate over collections using direct generic method chains.
+- **`Grouping[K, T]`**: provides typed grouping and aggregation methods for grouped iterator data.
 
 ## 🚀 Getting Started
 
@@ -39,6 +39,12 @@ go get github.com/alsi-lawr/gonads
 ```
 
 This library has no other dependencies beyond the go standard library.
+
+`gonads` uses generic concrete methods and requires Go 1.27 or newer. Before Go 1.27 is generally available, use `gotip` with the generic methods experiment:
+
+```sh
+GOEXPERIMENT=genericmethods gotip test ./...
+```
 
 ## Quick start
 
@@ -74,6 +80,15 @@ bound.Match(
 ```
 
 You've just used your first `gonad` 🥳!
+
+Try an `Iter` chain:
+
+```go
+items := iters.LiftSlice([]int{1, 2, 3})
+labels := items.Map[string](func(x int) string {
+ return fmt.Sprintf("item-%d", x)
+})
+```
 
 ## Documentation and examples
 
