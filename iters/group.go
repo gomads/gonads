@@ -39,6 +39,31 @@ func GroupByI[T any, K comparable](s Iter[T], f func(int, T) K) Grouping[K, T] {
 //
 // Type signature:
 //
+//	GroupBy :: Iter T -> (T -> K) -> Grouping K T
+//
+// Returns a map where each key is produced by f and the corresponding value is a slice of all
+// elements for which f returned that key.
+func (s Iter[T]) GroupBy[K comparable](f func(T) K) Grouping[K, T] {
+	return GroupBy(s, f)
+}
+
+// GroupByI groups elements of a slice into a map keyed by a function that takes the element's
+// index and value.
+//
+// Type signature:
+//
+//	GroupByI :: Iter T -> ((Int, T) -> K) -> Grouping K T
+//
+// Returns a map where each key is produced by f and the corresponding value is a slice of all
+// elements for which f returned that key.
+func (s Iter[T]) GroupByI[K comparable](f func(int, T) K) Grouping[K, T] {
+	return GroupByI(s, f)
+}
+
+// GroupBy groups elements of a slice into a map keyed by the output of the key function f.
+//
+// Type signature:
+//
 //	GroupBy :: Iter T -> (T -> any) -> Grouping any T
 //
 // Returns a map where each key is produced by f and the corresponding value is a slice of all

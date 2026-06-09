@@ -153,6 +153,39 @@ func MapStringI(s string, f func(int, rune) rune) string {
 //
 // Type signature:
 //
+//	Map :: Iter T -> (T -> R) -> Iter R
+//
+// Each element in the input slice is transformed using f.
+func (s Iter[T]) Map[R any](f func(T) R) Iter[R] {
+	return Map(s, f)
+}
+
+// MapSliceWithIndex applies a function to each element of a slice along with its index, returning a new slice with the mapped values.
+//
+// Type signature:
+//
+//	MapSliceWithIndex :: Iter T -> ((Int, T) -> R) -> Iter R
+//
+// The function f receives both the index and the element for transformation.
+func (s Iter[T]) MapI[R any](f func(int, T) R) Iter[R] {
+	return MapI(s, f)
+}
+
+// MapSliceErr applies a function to each element of a slice, returning a new slice with the mapped values or an error if one occurs.
+//
+// Type signature:
+//
+//	MapSliceErr :: Iter T -> (T -> (R, error)) -> Result Iter R
+//
+// Each element is processed using f, and processing stops if an error is encountered.
+func (s Iter[T]) MapErr[R any](f func(T) (R, error)) result.Result[Iter[R]] {
+	return MapErr(s, f)
+}
+
+// Map applies a function to each element of a slice, returning a new slice with the mapped values.
+//
+// Type signature:
+//
 //	Map :: Mappable T -> (T -> R) -> Iter R
 //
 // Each element in the input slice is transformed using f.
