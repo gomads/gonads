@@ -1,6 +1,7 @@
 package iters_test
 
 import (
+	"fmt"
 	"reflect"
 	"testing"
 
@@ -31,42 +32,27 @@ func TestAggregateIGStatic(t *testing.T) {
 	}
 }
 
-func TestAggregateGUnsafe(t *testing.T) {
+func TestAggregateG(t *testing.T) {
 	input := iters.Grouping[bool, int]{false: {1, 2, 3, 4}, true: {5, 6, 7, 8}}
-	got := input.AggregateUnsafe(func(y iters.Iter[int]) any { return 1 })
-	want := map[bool]any{false: 1, true: 1}
+	got := input.Aggregate[int](func(y iters.Iter[int]) int { return len(y) })
+	want := map[bool]int{false: 4, true: 4}
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("AggregateG() = %v, want %v", got, want)
 	}
 }
 
-func TestAggregateIGUnsafe(t *testing.T) {
+func TestAggregateGChangeType(t *testing.T) {
 	input := iters.Grouping[bool, int]{false: {1, 2, 3, 4}, true: {5, 6, 7, 8}}
-	got := input.AggregateIUnsafe(func(k bool, y iters.Iter[int]) any {
-		if k {
-			return 1
-		}
-		return 0
-	})
-
-	want := map[bool]any{false: 0, true: 1}
-	if !reflect.DeepEqual(got, want) {
-		t.Errorf("AggregateIG() = %v, want %v", got, want)
-	}
-}
-
-func TestAggregateG(t *testing.T) {
-	input := iters.Aggregable[bool, int, int]{false: {1, 2, 3, 4}, true: {5, 6, 7, 8}}
-	got := input.Aggregate(func(y iters.Iter[int]) int { return 1 })
-	want := map[bool]int{false: 1, true: 1}
+	got := input.Aggregate[string](func(y iters.Iter[int]) string { return fmt.Sprint(len(y)) })
+	want := map[bool]string{false: "4", true: "4"}
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("AggregateG() = %v, want %v", got, want)
 	}
 }
 
 func TestAggregateIG(t *testing.T) {
-	input := iters.Aggregable[bool, int, int]{false: {1, 2, 3, 4}, true: {5, 6, 7, 8}}
-	got := input.AggregateI(func(k bool, y iters.Iter[int]) int {
+	input := iters.Grouping[bool, int]{false: {1, 2, 3, 4}, true: {5, 6, 7, 8}}
+	got := input.AggregateI[int](func(k bool, y iters.Iter[int]) int {
 		if k {
 			return 1
 		}

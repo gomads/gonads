@@ -83,26 +83,8 @@ func FoldStringI[A any](s string, init A, f func(int, A, rune) A) A {
 //
 // Type signature:
 //
-//	Fold :: Mappable T -> A -> ((A, T) -> A) -> A
-func (s Mappable[T, A]) Fold(init A, f func(A, T) A) A {
-	return Fold((Iter[T])(s), init, f)
-}
-
-// FoldI applies a function to each element of a slice with its index, reducing it to a single value.
-//
-// Type signature:
-//
-//	FoldI :: Mappable T -> A -> ((Int, A, T) -> A) -> A
-func (s Mappable[T, A]) FoldI(init A, f func(int, A, T) A) A {
-	return FoldI((Iter[T])(s), init, f)
-}
-
-// Fold applies a function to each element of a slice, reducing it to a single value.
-//
-// Type signature:
-//
-//	Fold :: Iter T -> any -> ((any, T) -> any) -> any
-func (s Iter[T]) FoldUnsafe(init any, f func(any, T) any) any {
+//	Fold :: Iter T -> A -> ((A, T) -> A) -> A
+func (s Iter[T]) Fold[A any](init A, f func(A, T) A) A {
 	return Fold(s, init, f)
 }
 
@@ -110,7 +92,7 @@ func (s Iter[T]) FoldUnsafe(init any, f func(any, T) any) any {
 //
 // Type signature:
 //
-//	FoldI :: Iter T -> any -> ((Int, any, T) -> any) -> any
-func (s Iter[T]) FoldIUnsafe(init any, f func(int, any, T) any) any {
+//	FoldI :: Iter T -> A -> ((Int, A, T) -> A) -> A
+func (s Iter[T]) FoldI[A any](init A, f func(int, A, T) A) A {
 	return FoldI(s, init, f)
 }

@@ -139,18 +139,27 @@ func TestMapStringIStatic(t *testing.T) {
 }
 
 func TestMap(t *testing.T) {
-	input := iters.LiftMap[int, int]([]int{1, 2, 3})
+	input := iters.Iter[int]{1, 2, 3}
 	want := iters.Iter[int]{2, 4, 6}
-	got := input.Map(func(x int) int { return x * 2 })
+	got := input.Map[int](func(x int) int { return x * 2 })
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("Map() = %v, want %v", got, want)
+	}
+}
+
+func TestMapChangeType(t *testing.T) {
+	input := iters.Iter[int]{1, 2, 3}
+	want := iters.Iter[string]{"2", "4", "6"}
+	got := input.Map[string](func(x int) string { return fmt.Sprint(x * 2) })
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("Map() = %v, want %v", got, want)
 	}
 }
 
 func TestMapI(t *testing.T) {
-	input := iters.LiftMap[string, string]([]string{"a", "b", "c"})
+	input := iters.Iter[string]{"a", "b", "c"}
 	want := iters.Iter[string]{"0:a", "1:b", "2:c"}
-	got := input.MapI(
+	got := input.MapI[string](
 		func(i int, s string) string { return strings.Join([]string{fmt.Sprint(i), ":", s}, "") },
 	)
 	if !reflect.DeepEqual(got, want) {
@@ -159,9 +168,9 @@ func TestMapI(t *testing.T) {
 }
 
 func TestMapErr_Success(t *testing.T) {
-	input := iters.Mappable[int, int]{1, 2, 3}
+	input := iters.Iter[int]{1, 2, 3}
 	want := iters.Iter[int]{2, 4, 6}
-	input.MapErr(func(x int) (int, error) { return x * 2, nil }).Match(
+	input.MapErr[int](func(x int) (int, error) { return x * 2, nil }).Match(
 		func(x iters.Iter[int]) {
 			if !reflect.DeepEqual(x, want) {
 				t.Errorf("MapErr() = %v, want %v", x, want)
@@ -172,66 +181,15 @@ func TestMapErr_Success(t *testing.T) {
 }
 
 func TestMapErr_Error(t *testing.T) {
-	input := iters.Mappable[int, int]{1, 2, 3}
+	input := iters.Iter[int]{1, 2, 3}
 	testErr := errors.New("error at 2")
-	input.MapErr(func(x int) (int, error) {
+	input.MapErr[int](func(x int) (int, error) {
 		if x == 2 {
 			return 0, testErr
 		}
 		return x * 2, nil
 	}).Match(
 		func(x iters.Iter[int]) { t.Errorf("MapErr() unexpected result: %v", x) },
-		func(err error) {
-			if err.Error() != testErr.Error() {
-				t.Errorf("MapErr() error = %v, want %v", err, testErr)
-			}
-		},
-	)
-}
-
-func TestMapUnsafe(t *testing.T) {
-	input := iters.Iter[int]{1, 2, 3}
-	want := iters.Iter[any]{2, 4, 6}
-	got := input.MapUnsafe(func(x int) any { return x * 2 })
-	if !reflect.DeepEqual(got, want) {
-		t.Errorf("Map() = %v, want %v", got, want)
-	}
-}
-
-func TestMapIUnsafe(t *testing.T) {
-	input := iters.Iter[string]{"a", "b", "c"}
-	want := iters.Iter[any]{"0:a", "1:b", "2:c"}
-	got := input.MapIUnsafe(
-		func(i int, s string) any { return strings.Join([]string{fmt.Sprint(i), ":", s}, "") },
-	)
-	if !reflect.DeepEqual(got, want) {
-		t.Errorf("MapI() = %v, want %v", got, want)
-	}
-}
-
-func TestMapErr_SuccessUnsafe(t *testing.T) {
-	input := iters.Iter[int]{1, 2, 3}
-	want := iters.Iter[any]{2, 4, 6}
-	input.MapErrUnsafe(func(x int) (any, error) { return x * 2, nil }).Match(
-		func(x iters.Iter[any]) {
-			if !reflect.DeepEqual(x, want) {
-				t.Errorf("MapErr() = %v, want %v", x, want)
-			}
-		},
-		func(err error) { t.Errorf("MapErr() unexpected error: %v", err) },
-	)
-}
-
-func TestMapErr_ErrorUnsafe(t *testing.T) {
-	input := iters.Iter[int]{1, 2, 3}
-	testErr := errors.New("error at 2")
-	input.MapErrUnsafe(func(x int) (any, error) {
-		if x == 2 {
-			return 0, testErr
-		}
-		return x * 2, nil
-	}).Match(
-		func(x iters.Iter[any]) { t.Errorf("MapErr() unexpected result: %v", x) },
 		func(err error) {
 			if err.Error() != testErr.Error() {
 				t.Errorf("MapErr() error = %v, want %v", err, testErr)

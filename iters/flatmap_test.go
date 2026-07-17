@@ -1,6 +1,7 @@
 package iters_test
 
 import (
+	"fmt"
 	"reflect"
 	"testing"
 
@@ -31,8 +32,8 @@ func TestFlatMapIStatic(t *testing.T) {
 }
 
 func TestFlatMap(t *testing.T) {
-	input := iters.Mappable[int, int]{1, 2, 3}
-	got := input.FlatMap(func(x int) iters.Iter[int] {
+	input := iters.Iter[int]{1, 2, 3}
+	got := input.FlatMap[int](func(x int) iters.Iter[int] {
 		return []int{x, x * 10}
 	})
 	want := iters.Iter[int]{1, 10, 2, 20, 3, 30}
@@ -41,34 +42,23 @@ func TestFlatMap(t *testing.T) {
 	}
 }
 
-func TestFlatMapI(t *testing.T) {
-	input := iters.Mappable[string, string]{"a", "b", "c"}
-	got := input.FlatMapI(func(i int, s string) iters.Iter[string] {
-		return []string{s, string(rune('A' + i))}
-	})
-	want := iters.Iter[string]{"a", "A", "b", "B", "c", "C"}
-	if !reflect.DeepEqual(got, want) {
-		t.Errorf("FlatMapI() = %v, want %v", got, want)
-	}
-}
-func TestFlatMapUnsafe(t *testing.T) {
+func TestFlatMapChangeType(t *testing.T) {
 	input := iters.Iter[int]{1, 2, 3}
-	got := input.FlatMapUnsafe(func(x int) iters.Iter[any] {
-		return []any{x, x * 10}
+	got := input.FlatMap[string](func(x int) iters.Iter[string] {
+		return []string{fmt.Sprint(x), fmt.Sprint(x * 10)}
 	})
-	want := iters.Iter[any]{1, 10, 2, 20, 3, 30}
-
+	want := iters.Iter[string]{"1", "10", "2", "20", "3", "30"}
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("FlatMap() = %v, want %v", got, want)
 	}
 }
 
-func TestFlatMapIUnsafe(t *testing.T) {
+func TestFlatMapI(t *testing.T) {
 	input := iters.Iter[string]{"a", "b", "c"}
-	got := input.FlatMapIUnsafe(func(i int, s string) iters.Iter[any] {
-		return []any{s, string(rune('A' + i))}
+	got := input.FlatMapI[string](func(i int, s string) iters.Iter[string] {
+		return []string{s, string(rune('A' + i))}
 	})
-	want := iters.Iter[any]{"a", "A", "b", "B", "c", "C"}
+	want := iters.Iter[string]{"a", "A", "b", "B", "c", "C"}
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("FlatMapI() = %v, want %v", got, want)
 	}

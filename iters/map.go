@@ -153,73 +153,31 @@ func MapStringI(s string, f func(int, rune) rune) string {
 //
 // Type signature:
 //
-//	Map :: Mappable T -> (T -> R) -> Iter R
+//	Map :: Iter T -> (T -> R) -> Iter R
 //
 // Each element in the input slice is transformed using f.
-func (s Mappable[T, R]) Map(f func(T) R) Iter[R] {
-	return Map(s.ToIter(), f)
-}
-
-// MapSliceWithIndex applies a function to each element of a slice along with its index, returning a new slice with the mapped values.
-//
-// Type signature:
-//
-//	MapSliceWithIndex :: Mappable T -> ((Int, T) -> R) -> Iter R
-//
-// The function f receives both the index and the element for transformation.
-func (s Mappable[T, R]) MapI(f func(int, T) R) Iter[R] {
-	return MapI(s.ToIter(), f)
-}
-
-// MapSliceErr applies a function to each element of a slice, returning a new slice with the mapped values or an error if one occurs.
-//
-// Type signature:
-//
-//	MapSliceErr :: Mappable T -> (T -> (R, error)) -> (Iter R, error)
-//
-// Each element is processed using f, and processing stops if an error is encountered.
-func (s Mappable[T, R]) MapErr(f func(T) (R, error)) result.Result[Iter[R]] {
-	return MapErr(s.ToIter(), f)
-}
-
-// Map applies a function to each element of a slice, returning a new slice with the mapped values.
-//
-// [Unsafe Variant] This method loses compile-time type safety by returning `[]any` rather than a strongly-typed slice.
-// Use only when necessary.
-//
-// Type signature:
-//
-//	Map :: Iter T -> (T -> any) -> Iter any
-//
-// Each element in the input slice is transformed using f.
-func (s Iter[T]) MapUnsafe(f func(T) any) Iter[any] {
+func (s Iter[T]) Map[R any](f func(T) R) Iter[R] {
 	return Map(s, f)
 }
 
 // MapSliceWithIndex applies a function to each element of a slice along with its index, returning a new slice with the mapped values.
 //
-// [Unsafe Variant] This method loses compile-time type safety by returning `[]any` rather than a strongly-typed slice.
-// Use only when necessary.
-//
 // Type signature:
 //
-//	MapSliceWithIndex :: Iter T -> ((Int, T) -> any) -> Iter any
+//	MapSliceWithIndex :: Iter T -> ((Int, T) -> R) -> Iter R
 //
 // The function f receives both the index and the element for transformation.
-func (s Iter[T]) MapIUnsafe(f func(int, T) any) Iter[any] {
+func (s Iter[T]) MapI[R any](f func(int, T) R) Iter[R] {
 	return MapI(s, f)
 }
 
 // MapSliceErr applies a function to each element of a slice, returning a new slice with the mapped values or an error if one occurs.
 //
-// [Unsafe Variant] This method loses compile-time type safety by returning `[]any` rather than a strongly-typed slice.
-// Use only when necessary.
-//
 // Type signature:
 //
-//	MapSliceErr :: Iter T -> (T -> (any, error)) -> Result Iter any
+//	MapSliceErr :: Iter T -> (T -> (R, error)) -> Result Iter R
 //
 // Each element is processed using f, and processing stops if an error is encountered.
-func (s Iter[T]) MapErrUnsafe(f func(T) (any, error)) result.Result[Iter[any]] {
+func (s Iter[T]) MapErr[R any](f func(T) (R, error)) result.Result[Iter[R]] {
 	return MapErr(s, f)
 }
