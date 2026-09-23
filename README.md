@@ -40,10 +40,11 @@ go get github.com/alsi-lawr/gonads
 
 This library has no other dependencies beyond the go standard library.
 
-`gonads` uses generic concrete methods and requires Go 1.27 or newer. Before Go 1.27 is generally available, use `gotip` with the generic methods experiment:
+`gonads` uses generic concrete methods and requires Go 1.27 or newer. Build and test with the standard Go toolchain:
 
 ```sh
-GOEXPERIMENT=genericmethods gotip test ./...
+go build ./...
+go test ./...
 ```
 
 ## Quick start

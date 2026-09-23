@@ -11,30 +11,20 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      GOEXPERIMENT: genericmethods
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up bootstrap Go
+      - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.26.x'
-
-      - name: Install gotip
-        run: |
-          go install golang.org/dl/gotip@latest
-          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
-
-      - name: Download gotip toolchain
-        run: gotip download
+          go-version: '1.27.x'
 
       - name: Build
-        run: gotip build -v ./...
+        run: go build -v ./...
 
       - name: Test
-        run: gotip test -v -coverprofile=coverage.out -covermode=atomic ./...
+        run: go test -v -coverprofile=coverage.out -covermode=atomic ./...
 
       - name: Codecov
         uses: codecov/codecov-action@v4

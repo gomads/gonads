@@ -5,7 +5,7 @@ Reference: https://github.com/golang/go/issues/77273
 
 ## Scope
 
-Migrate iterator APIs that currently use helper types or unsafe `any` methods to simulate method-level type parameters. This work depends on Go 1.27, or `gotip` with `GOEXPERIMENT=genericmethods`, and applies only to concrete methods. Generic interface methods are out of scope.
+Migrate iterator APIs that currently use helper types or unsafe `any` methods to simulate method-level type parameters. This work depends on Go 1.27 or newer and applies only to concrete methods. Generic interface methods are out of scope.
 
 Treat this as a breaking, greenfield cleanup. Do not keep compatibility wrappers for helper APIs that only exist because generic methods were unavailable.
 
@@ -78,6 +78,6 @@ Remove unsafe method variants that become redundant after typed generic methods 
 
 ## Validation
 
-- Use a Go toolchain that supports generic concrete methods: Go 1.27 or `gotip` with `GOEXPERIMENT=genericmethods`.
+- Use Go 1.27 or newer, which supports generic concrete methods.
 - Run `go test ./...` under that toolchain.
 - Confirm no remaining references to `Mappable`, `Aggregable`, `LiftMap`, `LiftAggregable`, or removed unsafe method names remain in code, tests, or docs.
