@@ -1,40 +1,34 @@
-name: build-test 
+name: build-test
 
 on:
   push:
     tags:
       - '**'
     branches:
-      - '**'
+      - master
   pull_request:
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        go:
-          - '1.18'
+
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Set up Go
-      uses: actions/setup-go@v5
-      with:
-        go-version: 1.23 
-        stable: false
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.27.x'
 
-    - name: Build
-      run: go build -v ./... 
+      - name: Build
+        run: go build -v ./...
 
-    - name: Test
-      run: go test -v -coverprofile=coverage.out -covermode=atomic ./...
+      - name: Test
+        run: go test -v -coverprofile=coverage.out -covermode=atomic ./...
 
-    - name: Codecov
-      uses: codecov/codecov-action@v4
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        slug: alsi-lawr/gonads
-        verbose: true
-      if: matrix.go == '1.18'
+      - name: Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: alsi-lawr/gonads
+          verbose: true
